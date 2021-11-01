@@ -37,16 +37,25 @@ public class RestauranteController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante save(@RequestBody Restaurante restaurante) {
-        return restauranteService.save(restaurante);
+
+    public ResponseEntity<?> save(@RequestBody Restaurante restaurante) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(restauranteService.save(restaurante));
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Restaurante> update(@PathVariable Long id,
-                                              @RequestBody Restaurante restauranteBody) {
+    public ResponseEntity<?> update(@PathVariable Long id,
+                                    @RequestBody Restaurante restauranteBody) {
         if (restauranteService.find(id) == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(restauranteService.save(restauranteBody));
+        try {
+            restauranteService.save(restauranteBody);
+            return ResponseEntity.noContent().build();
+        } catch (EntidadeNaoEncontradaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
@@ -56,7 +65,7 @@ public class RestauranteController {
             return ResponseEntity.noContent().build();
         } catch (EntidadeEmUsoException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EntidadeNaoEncontradaException e){
+        } catch (EntidadeNaoEncontradaException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

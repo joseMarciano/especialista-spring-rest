@@ -27,16 +27,16 @@ public class CozinhaService {
         return cozinhaRepository.listar();
     }
 
-    public Cozinha find(@PathVariable Long id) {
+    public Cozinha find(Long id) {
         return cozinhaRepository.buscar(id);
     }
 
-    public Cozinha save(@RequestBody Cozinha cozinha) {
+    public Cozinha save(Cozinha cozinha) {
         return cozinhaRepository.salvar(cozinha);
     }
 
-    public ResponseEntity<Cozinha> update(@PathVariable Long id,
-                                          @RequestBody Cozinha cozinhaBody) {
+    public ResponseEntity<Cozinha> update(Long id,
+                                          Cozinha cozinhaBody) {
         if (cozinhaRepository.buscar(id) == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cozinhaRepository.salvar(cozinhaBody));
     }

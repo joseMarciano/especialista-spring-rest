@@ -2,7 +2,6 @@ package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
@@ -11,17 +10,20 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RestauranteService {
 
     private final RestauranteRepository restauranteRepository;
+    private final CozinhaRepository cozinhaRepository;
 
-    public RestauranteService(RestauranteRepository restauranteRepository) {
+    public RestauranteService(RestauranteRepository restauranteRepository,
+                              CozinhaRepository cozinhaRepository) {
         this.restauranteRepository = restauranteRepository;
+        this.cozinhaRepository = cozinhaRepository;
     }
 
     public List<Restaurante> listAll() {
@@ -32,12 +34,19 @@ public class RestauranteService {
         return restauranteRepository.buscar(id);
     }
 
-    public Restaurante save(@RequestBody Restaurante restaurante) {
+    public Restaurante save(Restaurante restaurante) {
+        Long cozinhaId = restaurante.getCozinha().getId();
+
+        if (Objects.isNull(cozinhaRepository.buscar(cozinhaId)))
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Não existe cadastro de cozinha com código %d", cozinhaId)
+            );
+
         return restauranteRepository.salvar(restaurante);
     }
 
-    public ResponseEntity<Restaurante> update(@PathVariable Long id,
-                                          @RequestBody Restaurante restauranteBody) {
+    public ResponseEntity<Restaurante> update(Long id,
+                                              Restaurante restauranteBody) {
         if (restauranteRepository.buscar(id) == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(restauranteRepository.salvar(restauranteBody));
     }
