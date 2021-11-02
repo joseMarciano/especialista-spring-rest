@@ -24,26 +24,26 @@ public class CozinhaService {
     }
 
     public List<Cozinha> listAll() {
-        return cozinhaRepository.listar();
+        return cozinhaRepository.findAll();
     }
 
     public Cozinha find(Long id) {
-        return cozinhaRepository.buscar(id);
+        return cozinhaRepository.findById(id).orElse(null);
     }
 
     public Cozinha save(Cozinha cozinha) {
-        return cozinhaRepository.salvar(cozinha);
+        return cozinhaRepository.save(cozinha);
     }
 
     public ResponseEntity<Cozinha> update(Long id,
                                           Cozinha cozinhaBody) {
-        if (cozinhaRepository.buscar(id) == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(cozinhaRepository.salvar(cozinhaBody));
+        if (find(id) == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(cozinhaRepository.save(cozinhaBody));
     }
 
     public void remove(Long id) {
         try {
-            cozinhaRepository.remover(id);
+            cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não encontrada", id));
         } catch (DataIntegrityViolationException e) {

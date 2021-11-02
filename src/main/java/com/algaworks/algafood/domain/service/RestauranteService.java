@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class RestauranteService {
@@ -27,33 +26,33 @@ public class RestauranteService {
     }
 
     public List<Restaurante> listAll() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     public Restaurante find(@PathVariable Long id) {
-        return restauranteRepository.buscar(id);
+        return restauranteRepository.findById(id).orElse(null);
     }
 
     public Restaurante save(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
 
-        if (Objects.isNull(cozinhaRepository.buscar(cozinhaId)))
-            throw new EntidadeNaoEncontradaException(
-                    String.format("Não existe cadastro de cozinha com código %d", cozinhaId)
-            );
+        cozinhaRepository.findById(cozinhaId).orElseThrow(() ->
+                new EntidadeNaoEncontradaException(
+                        String.format("Não existe cadastro de cozinha com código %d", cozinhaId)
+                ));
 
-        return restauranteRepository.salvar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     public ResponseEntity<Restaurante> update(Long id,
                                               Restaurante restauranteBody) {
-        if (restauranteRepository.buscar(id) == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(restauranteRepository.salvar(restauranteBody));
+        if (find(id) == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(restauranteRepository.save(restauranteBody));
     }
 
     public void remove(Long id) {
         try {
-            restauranteRepository.remover(id);
+            restauranteRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(String.format("Restaurante de código %d não encontrada.", id));
         } catch (DataIntegrityViolationException e) {

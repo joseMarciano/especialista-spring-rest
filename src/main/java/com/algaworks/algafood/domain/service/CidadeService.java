@@ -4,7 +4,6 @@ import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
-import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class CidadeService {
@@ -27,33 +25,33 @@ public class CidadeService {
     }
 
     public List<Cidade> listAll() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     public Cidade find(Long id) {
-        return cidadeRepository.buscar(id);
+        return cidadeRepository.findById(id).orElse(null);
     }
 
     public Cidade save(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
 
-        if(Objects.isNull(estadoRepository.buscar(estadoId)))
-            throw new EntidadeNaoEncontradaException(
-                    String.format("Não existe cadastro de estado com código %d", estadoId)
-            );
+        estadoRepository.findById(estadoId).orElseThrow(() ->
+                new EntidadeNaoEncontradaException(
+                        String.format("Não existe cadastro de estado com código %d", estadoId)
+                ));
 
-        return cidadeRepository.salvar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     public ResponseEntity<Cidade> update(Long id,
                                          Cidade cidadeBody) {
-        if (cidadeRepository.buscar(id) == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(cidadeRepository.salvar(cidadeBody));
+        if (find(id) == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(cidadeRepository.save(cidadeBody));
     }
 
     public void remove(Long id) {
         try {
-            cidadeRepository.remover(id);
+            cidadeRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(String.format("Cidade de código %d não encontrada", id));
         } catch (DataIntegrityViolationException e) {

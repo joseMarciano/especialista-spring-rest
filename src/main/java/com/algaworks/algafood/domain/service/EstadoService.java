@@ -21,26 +21,26 @@ public class EstadoService {
     }
 
     public List<Estado> listAll() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     public Estado find(Long id) {
-        return estadoRepository.buscar(id);
+        return estadoRepository.findById(id).orElse(null);
     }
 
     public Estado save(Estado estado) {
-        return estadoRepository.salvar(estado);
+        return estadoRepository.save(estado);
     }
 
     public ResponseEntity<Estado> update(Long id,
                                          Estado estadoBody) {
-        if (estadoRepository.buscar(id) == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(estadoRepository.salvar(estadoBody));
+        if (find(id) == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(estadoRepository.save(estadoBody));
     }
 
     public void remove(Long id) {
         try {
-            estadoRepository.remover(id);
+            estadoRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaException(String.format("Estado de código %d não encontrada", id));
         } catch (DataIntegrityViolationException e) {
