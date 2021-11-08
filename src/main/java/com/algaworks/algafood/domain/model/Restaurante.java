@@ -40,7 +40,7 @@ public class Restaurante {
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
     )
-    private List<FormaPagamento> formasPagamentos = new ArrayList<>();
+    private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "restaurante", orphanRemoval = true)
