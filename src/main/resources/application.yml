@@ -1,9 +1,13 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/algafood?serverTimezone=UT
     username: root
     password: admin
-    url: jdbc:mysql://localhost:3306/algafood?serverTimezone=UT
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 3
+      idle-timeout: 10000
 
   jpa:
     show-sql: true
