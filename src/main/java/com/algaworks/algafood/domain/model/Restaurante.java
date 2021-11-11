@@ -23,22 +23,22 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "NOME")
     private String nome;
 
-    @Column(name = "taxa_frete", nullable = false)
+    @Column(name = "TAXA_FRETE")
     private BigDecimal taxaFrete;
 
     @ManyToOne
-    @JoinColumn(name = "cozinha_id", nullable = false)
+    @JoinColumn(name = "COZINHAS_ID")
     private Cozinha cozinha;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "restaurante_forma_pagamento",
-            joinColumns = @JoinColumn(name = "restaurante_id"),
-            inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
+            name = "RESTAURANTES_FORMAS_PAGAMENTO",
+            joinColumns = @JoinColumn(name = "RESTAURANTES_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FORMAS_PAGAMENTO_ID")
     )
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
 
@@ -51,11 +51,11 @@ public class Restaurante {
     private Endereco endereco;
 
     @CreationTimestamp
-    @Column(columnDefinition = "DATETIME(0)")
+    @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)")
     private LocalDateTime dataCadastro;
 
     @UpdateTimestamp
-    @Column(columnDefinition = "DATETIME(0)")
+    @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
     private LocalDateTime dataAtualizacao;
 
 }

@@ -9,25 +9,24 @@ import javax.persistence.ManyToOne;
 
 @Embeddable
 @Data
-
 public class Endereco {
 
-    @Column(name = "endereco_cep")
+    @Column(name = "ENDERECO_CEP")
     private String cep;
 
-    @Column(name = "endereco_logradouro")
+    @Column(name = "ENDERECO_LOGRADOURO")
     private String logradouro;
 
-    @Column(name = "endereco_numero")
+    @Column(name = "ENDERECO_NUMERO")
     private String numero;
 
-    @Column(name = "endereco_complemento")
+    @Column(name = "ENDERECO_COMPLEMENTO")
     private String complemento;
 
-    @Column(name = "endereco_bairro")
+    @Column(name = "ENDERECO_BAIRRO")
     private String bairro;
 
     @ManyToOne
-    @JoinColumn(name = "endereco_cidade_id")
+    @JoinColumn(name = "ENDERECO_CIDADE_ID")
     private Cidade cidade;
 }

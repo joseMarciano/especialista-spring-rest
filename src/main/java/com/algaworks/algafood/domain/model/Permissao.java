@@ -1,9 +1,9 @@
 package com.algaworks.algafood.domain.model;
 
-import javax.persistence.*;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.persistence.*;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -16,10 +16,10 @@ public class Permissao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "NOME")
     private String nome;
 
-    @Column(nullable = false)
+    @Column(name = "DESCRICAO")
     private String descricao;
 
 }

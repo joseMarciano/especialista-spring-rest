@@ -1,7 +1,5 @@
 package com.algaworks.algafood.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,15 +19,19 @@ public class Produto {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(name = "NOME")
     private String nome;
 
+    @Column(name = "DESCRICAO")
     private String descricao;
 
+    @Column(name = "PRECO")
     private BigDecimal preco;
 
+    @Column(name = "ATIVO")
     private boolean ativo;
 
     @ManyToOne
-    @JoinColumn(name = "restaurante_id")
+    @JoinColumn(name = "RESTAURANTES_ID")
     private Restaurante restaurante;
 }

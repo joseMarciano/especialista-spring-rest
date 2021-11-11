@@ -23,21 +23,22 @@ public class Grupo {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(name = "NOME")
     private String nome;
 
     @CreationTimestamp
-    @Column(nullable = false, columnDefinition = "DATETIME(0)")
+    @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)")
     private LocalDateTime dataCadastro;
 
     @UpdateTimestamp
-    @Column(nullable = false, columnDefinition = "DATETIME(0)")
+    @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
     private LocalDateTime dataAtualizacao;
 
     @ManyToMany
     @JoinTable(
             name = "GRUPOS_PERMISSOES",
-            joinColumns = @JoinColumn(name = "grupo_id"),
-            inverseJoinColumns = @JoinColumn(name = "permissao_id")
+            joinColumns = @JoinColumn(name = "GRUPOS_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PERMISSOES_ID")
     )
     private List<Permissao> permissoes = new ArrayList<>();
 
