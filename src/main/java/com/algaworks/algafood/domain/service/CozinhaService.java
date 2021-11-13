@@ -6,11 +6,8 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -29,6 +26,10 @@ public class CozinhaService {
 
     public Cozinha find(Long id) {
         return cozinhaRepository.findById(id).orElse(null);
+    }
+
+    public Cozinha buscarOuFalhar(Long id) {
+        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("AAAAAAAAA"));
     }
 
     public Cozinha save(Cozinha cozinha) {

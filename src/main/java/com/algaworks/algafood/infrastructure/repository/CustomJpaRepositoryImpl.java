@@ -29,4 +29,17 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
 
         return Optional.ofNullable(resultList);
     }
+
+//    @Override
+//    public T buscarOuFalhar(Long id) {
+//        var jpql = "from " + getDomainClass().getName() + " where id = " + id;
+//
+//        try {
+//            return em.createQuery(jpql, getDomainClass())
+//                    .getSingleResult();
+//        } catch (NoResultException ex) {
+//            throw new EntidadeNaoEncontradaException(String.format("%s de id %s não foi encontrada", getDomainClass().getName(), id));
+//        }
+//
+//    }
 }
