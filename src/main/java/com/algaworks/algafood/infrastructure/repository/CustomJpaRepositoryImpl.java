@@ -1,7 +1,7 @@
 package com.algaworks.algafood.infrastructure.repository;
 
 
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.ExceptionFactory;
 import com.algaworks.algafood.domain.repository.CustomJpaRepository;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -33,15 +33,14 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
     }
 
     @Override
-    public T buscarOuFalhar(Long id) {
+    public T buscarOuFalhar(Long id)  {
         var jpql = "from " + getDomainClass().getName() + " where id = " + id;
 
         try {
             return em.createQuery(jpql, getDomainClass())
                     .getSingleResult();
         } catch (NoResultException ex) {
-            //TODO LANÇAR EXCEPTION ESPECIFICA DE CADA ENTIDADE
-            throw new EntidadeNaoEncontradaException(String.format("%s de id %s não foi encontrada", getDomainClass().getName(), id));
+            throw ExceptionFactory.build(String.format("%sNaoEncontradoException",getDomainClass().getSimpleName()));
         }
 
     }

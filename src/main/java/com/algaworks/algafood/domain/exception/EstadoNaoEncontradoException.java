@@ -2,6 +2,12 @@ package com.algaworks.algafood.domain.exception;
 
 public class EstadoNaoEncontradoException extends EntidadeNaoEncontradaException {
 
+    private static final String DEFAULT_MESSAGE = "Estado não encontrado";
+
+    public EstadoNaoEncontradoException() {
+        super(DEFAULT_MESSAGE);
+    }
+
     public EstadoNaoEncontradoException(String message) {
         super(message);
     }
