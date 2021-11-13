@@ -56,4 +56,8 @@ public class RestauranteService {
             throw new EntidadeEmUsoException(String.format("Resturante de código %d não pode ser removido pois está em uso.", id));
         }
     }
+
+    public Restaurante buscarOuFalhar(Long id) {
+        return restauranteRepository.buscarOuFalhar(id);
+    }
 }

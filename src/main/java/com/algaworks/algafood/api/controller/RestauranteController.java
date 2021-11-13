@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.controller;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
 import org.springframework.http.HttpStatus;
@@ -27,27 +28,27 @@ public class RestauranteController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Restaurante> find(@PathVariable Long id) {
-        Restaurante restaurante = restauranteService.find(id);
-        return restaurante == null
-                ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(restaurante);
+    public Restaurante find(@PathVariable Long id) {
+        return restauranteService.buscarOuFalhar(id);
     }
 
     @PostMapping
     public Restaurante save(@RequestBody Restaurante restaurante) {
-        return restauranteService.save(restaurante);
+        try {
+            return restauranteService.save(restaurante);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable Long id,
-                                    @RequestBody Restaurante restauranteBody) {
-        if (restauranteService.find(id) == null) return ResponseEntity.notFound().build();
+    public Restaurante update(@PathVariable Long id,
+                              @RequestBody Restaurante restauranteBody) {
+        restauranteService.buscarOuFalhar(id);
         try {
-            restauranteService.save(restauranteBody);
-            return ResponseEntity.noContent().build();
+            return restauranteService.save(restauranteBody);
         } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            throw new NegocioException(e.getMessage());
         }
     }
 
