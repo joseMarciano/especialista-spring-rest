@@ -32,13 +32,14 @@ public class CidadeService {
         return cidadeRepository.findById(id).orElse(null);
     }
 
+    public Cidade buscarOuFalhar(Long id) {
+        return cidadeRepository.buscarOuFalhar(id);
+    }
+
     public Cidade save(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
 
-        estadoRepository.findById(estadoId).orElseThrow(() ->
-                new EntidadeNaoEncontradaException(
-                        String.format("Não existe cadastro de estado com código %d", estadoId)
-                ));
+        estadoRepository.buscarOuFalhar(estadoId);
 
         return cidadeRepository.save(cidade);
     }

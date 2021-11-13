@@ -30,11 +30,8 @@ public class EstadoController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Estado> find(@PathVariable Long id) {
-        Estado estado = estadoService.find(id);
-        return estado == null
-                ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(estado);
+    public Estado find(@PathVariable Long id) {
+        return estadoService.buscarOuFalhar(id);
     }
 
     @PostMapping
@@ -44,21 +41,16 @@ public class EstadoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Estado> update(@PathVariable Long id,
-                                         @RequestBody Estado estadoBody) {
-        if (estadoService.find(id) == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(estadoService.save(estadoBody));
+    public Estado update(@PathVariable Long id,
+                         @RequestBody Estado estadoBody) {
+
+        estadoService.buscarOuFalhar(id);
+        return estadoService.save(estadoBody);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> remove(@PathVariable Long id) {
-        try {
-            estadoService.remove(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remove(@PathVariable Long id) {
+        estadoService.remove(id);
     }
 }

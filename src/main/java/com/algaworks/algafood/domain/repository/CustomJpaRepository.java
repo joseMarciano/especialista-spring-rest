@@ -10,5 +10,5 @@ public interface CustomJpaRepository<T, ID> extends JpaRepository<T, ID> {
 
     Optional<T> findFirst();
 
-//    T buscarOuFalhar(Long id);
+    T buscarOuFalhar(Long id);
 }

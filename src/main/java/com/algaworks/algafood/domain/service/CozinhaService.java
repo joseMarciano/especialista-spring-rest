@@ -29,7 +29,7 @@ public class CozinhaService {
     }
 
     public Cozinha buscarOuFalhar(Long id) {
-        return cozinhaRepository.findById(id).orElseThrow(() -> new EntidadeNaoEncontradaException("AAAAAAAAA"));
+        return cozinhaRepository.buscarOuFalhar(id);
     }
 
     public Cozinha save(Cozinha cozinha) {

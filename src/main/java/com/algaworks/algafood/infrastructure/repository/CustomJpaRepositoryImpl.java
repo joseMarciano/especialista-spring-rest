@@ -1,11 +1,13 @@
 package com.algaworks.algafood.infrastructure.repository;
 
 
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.repository.CustomJpaRepository;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.Optional;
 
 public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements CustomJpaRepository<T, ID> {
@@ -30,16 +32,16 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
         return Optional.ofNullable(resultList);
     }
 
-//    @Override
-//    public T buscarOuFalhar(Long id) {
-//        var jpql = "from " + getDomainClass().getName() + " where id = " + id;
-//
-//        try {
-//            return em.createQuery(jpql, getDomainClass())
-//                    .getSingleResult();
-//        } catch (NoResultException ex) {
-//            throw new EntidadeNaoEncontradaException(String.format("%s de id %s não foi encontrada", getDomainClass().getName(), id));
-//        }
-//
-//    }
+    @Override
+    public T buscarOuFalhar(Long id) {
+        var jpql = "from " + getDomainClass().getName() + " where id = " + id;
+
+        try {
+            return em.createQuery(jpql, getDomainClass())
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            throw new EntidadeNaoEncontradaException(String.format("%s de id %s não foi encontrada", getDomainClass().getName(), id));
+        }
+
+    }
 }

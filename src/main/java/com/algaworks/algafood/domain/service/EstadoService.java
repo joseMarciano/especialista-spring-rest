@@ -28,6 +28,10 @@ public class EstadoService {
         return estadoRepository.findById(id).orElse(null);
     }
 
+    public Estado buscarOuFalhar(Long id) {
+        return estadoRepository.buscarOuFalhar(id);
+    }
+
     public Estado save(Estado estado) {
         return estadoRepository.save(estado);
     }
