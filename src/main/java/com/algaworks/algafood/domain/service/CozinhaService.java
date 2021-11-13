@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
@@ -46,7 +47,7 @@ public class CozinhaService {
         try {
             cozinhaRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(String.format("Cozinha de código %d não encontrada", id));
+            throw new CozinhaNaoEncontradoException(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(String.format("Cozinha de código %d não pode ser removida pois está em uso.", id));
         }

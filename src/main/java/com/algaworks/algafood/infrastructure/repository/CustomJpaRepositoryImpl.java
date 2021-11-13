@@ -40,6 +40,7 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> i
             return em.createQuery(jpql, getDomainClass())
                     .getSingleResult();
         } catch (NoResultException ex) {
+            //TODO LANÇAR EXCEPTION ESPECIFICA DE CADA ENTIDADE
             throw new EntidadeNaoEncontradaException(String.format("%s de id %s não foi encontrada", getDomainClass().getName(), id));
         }
 
