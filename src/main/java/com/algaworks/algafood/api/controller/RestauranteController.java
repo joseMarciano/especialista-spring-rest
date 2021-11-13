@@ -37,7 +37,7 @@ public class RestauranteController {
         try {
             return restauranteService.save(restaurante);
         } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
@@ -48,7 +48,7 @@ public class RestauranteController {
         try {
             return restauranteService.save(restauranteBody);
         } catch (EntidadeNaoEncontradaException e) {
-            throw new NegocioException(e.getMessage());
+            throw new NegocioException(e.getMessage(), e);
         }
     }
 
