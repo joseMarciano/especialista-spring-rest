@@ -63,14 +63,5 @@ public class CidadeController {
         cidadeService.remove(id);
     }
 
-    @ExceptionHandler({EntidadeNaoEncontradaException.class})
-    public ResponseEntity<?> handleEstadoNaoEncontradoException(EntidadeNaoEncontradaException e) {
 
-        Problema problema = Problema.builder()
-                .dataHora(LocalDateTime.now())
-                .mensagem(e.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
-    }
 }
