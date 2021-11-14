@@ -8,6 +8,7 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -75,6 +76,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
         }
 
+        if (rootCause instanceof PropertyBindingException) {
+            return handlePropertyBindingExceptionException((PropertyBindingException) rootCause, headers, status, request);
+        }
+
 
         ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
         Problem problem =
@@ -84,6 +89,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
         return handleExceptionInternal(e, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handlePropertyBindingExceptionException(PropertyBindingException rootCause,
+                                                                           HttpHeaders headers,
+                                                                           HttpStatus status,
+                                                                           WebRequest request) {
+
+
+        ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+        Problem problem =
+                problemBuilder(status, type, null)
+                        .detail(String.format("A propriedade '%s' é inválida",
+                                rootCause.getPropertyName()))
+                        .build();
+
+
+        return handleExceptionInternal(rootCause, problem, headers, status, request);
     }
 
     private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException e,
