@@ -92,6 +92,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .build();
         }
 
+        ex.printStackTrace();
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
