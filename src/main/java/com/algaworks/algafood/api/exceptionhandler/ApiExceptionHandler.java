@@ -8,6 +8,7 @@ import com.algaworks.algafood.domain.exception.NegocioException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -59,13 +60,28 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
+
+        ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+
+        Problem problem =
+                problemBuilder(status, type, null)
+                        .detail("Corpo da requisição está inválido. Verifique erro de sintaxe")
+                        .build();
+
+
+        return handleExceptionInternal(e, problem, headers, status, request);
+    }
+
+    @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
                                                              Object body,
                                                              HttpHeaders headers,
                                                              HttpStatus status,
                                                              WebRequest request) {
-
-
         if (Objects.isNull(body)) {
             body = Problem.builder()
                     .detail(ex.getMessage())
@@ -75,7 +91,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .detail(ex.getMessage())
                     .build();
         }
-
 
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
