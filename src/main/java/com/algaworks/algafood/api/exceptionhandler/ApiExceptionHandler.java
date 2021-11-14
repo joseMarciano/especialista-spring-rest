@@ -5,18 +5,22 @@ import com.algaworks.algafood.api.exceptionhandler.Problem.ProblemBuilder;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -65,11 +69,39 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpStatus status,
                                                                   WebRequest request) {
 
-        ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+        Throwable rootCause = ExceptionUtils.getRootCause(e);
 
+        if (rootCause instanceof InvalidFormatException) {
+            return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+        }
+
+
+        ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
         Problem problem =
                 problemBuilder(status, type, null)
                         .detail("Corpo da requisição está inválido. Verifique erro de sintaxe")
+                        .build();
+
+
+        return handleExceptionInternal(e, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException e,
+                                                                HttpHeaders headers,
+                                                                HttpStatus status,
+                                                                WebRequest request) {
+
+        String fieldValue = e.getValue().toString();
+        String fieldTargetType = e.getTargetType().getSimpleName();
+        String fieldName = e.getPath().stream().map(Reference::getFieldName).collect(Collectors.joining("."));
+
+        ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
+        Problem problem =
+                problemBuilder(status, type, null)
+                        .detail(String.format("A propriedade '%s' recebeu um valor '%s', " +
+                                        "que é de um tipo inválido. Corriga e informe um valor compatível " +
+                                        "com o tipo %s."
+                                , fieldName, fieldValue, fieldTargetType))
                         .build();
 
 
