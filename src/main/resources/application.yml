@@ -12,6 +12,10 @@ spring:
       minimum-idle: 3
       idle-timeout: 10000
 
+  resources.add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
   jackson:
     deserialization:
       fail-on-unknown-properties: true
@@ -27,3 +31,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL57Dialect
+#logging:
+#  level:
+#    root: ERROR
