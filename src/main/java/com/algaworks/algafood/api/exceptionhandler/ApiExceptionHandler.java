@@ -46,6 +46,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problem problem =
                 problemBuilder(status, type, e.getMessage())
+
                         .build();
 
         return handleExceptionInternal(e, problem, new HttpHeaders(), status, webRequest);
@@ -199,6 +200,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ProblemBuilder problemBuilder(HttpStatus status, ProblemType type, String detail) {
         return Problem.builder()
                 .timestamp(LocalDateTime.now())
+                .userMessage("Ocorreu um erro no servidor")
                 .status(status.value())
                 .type(type.getUri())
                 .detail(detail)
