@@ -28,6 +28,17 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<?> handlException(Exception e, WebRequest webRequest) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ProblemType type = ProblemType.ERRO_DE_SISTEMA;
+
+        Problem problem =
+                problemBuilder(status, type, "Ocorreu um erro interno inesperado no sistema")
+                        .build();
+
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, webRequest);
+    }
     @ExceptionHandler({EntidadeNaoEncontradaException.class})
     public ResponseEntity<?> handleEstadoNaoEncontradoException(EntidadeNaoEncontradaException e, WebRequest webRequest) {
         HttpStatus status = HttpStatus.NOT_FOUND;
