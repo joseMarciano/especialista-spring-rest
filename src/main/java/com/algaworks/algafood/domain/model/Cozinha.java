@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -12,7 +13,9 @@ import javax.persistence.*;
 public class Cozinha {
 
     @EqualsAndHashCode.Include
+    @Column(name = "ID", updatable = false)
     @Id
+    @NotNull(message = "É obrigatório informar um identificador para cozinha")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
