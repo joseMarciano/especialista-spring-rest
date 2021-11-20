@@ -12,6 +12,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,19 +30,20 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(groups = {Groups.CadastroRestaurante.class}, message = "É obrigatório informar o nome")
+    @NotBlank(message = "É obrigatório informar o nome")
 //    @NotNull
 //    @NotEmpty
     @Column(name = "NOME")
     private String nome;
 
     //    @DecimalMin(value = "1", message = "O valor mínimo da taxa de frete é {value}")
-    @PositiveOrZero(groups = {Groups.CadastroRestaurante.class}, message = "O valor da taxa frete deve ser maior do que zero")
+    @PositiveOrZero(message = "O valor da taxa frete deve ser maior do que zero")
     @Column(name = "TAXA_FRETE")
     private BigDecimal taxaFrete;
 
     @ManyToOne
-    @NotNull(groups = {Groups.CadastroRestaurante.class}, message = "É obrigatório informar uma cozinha")
+    @NotNull(message = "É obrigatório informar uma cozinha")
+    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @Valid // validação em cascata
     @JoinColumn(name = "COZINHAS_ID")
     private Cozinha cozinha;

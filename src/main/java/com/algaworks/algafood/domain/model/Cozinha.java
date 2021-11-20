@@ -18,7 +18,7 @@ public class Cozinha {
     @Column(name = "ID", updatable = false)
     @Id
     @NotNull(
-            groups = {Groups.CadastroRestaurante.class},
+            groups = {Groups.CozinhaId.class},
             message = "É obrigatório informar um identificador para cozinha"
     )
     @GeneratedValue(strategy = GenerationType.IDENTITY)
