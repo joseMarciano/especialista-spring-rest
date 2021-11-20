@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
+import com.algaworks.algafood.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
@@ -28,19 +28,19 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "É obrigatório informar o nome")
+    @NotBlank(groups = {Groups.CadastroRestaurante.class}, message = "É obrigatório informar o nome")
 //    @NotNull
 //    @NotEmpty
     @Column(name = "NOME")
     private String nome;
 
     //    @DecimalMin(value = "1", message = "O valor mínimo da taxa de frete é {value}")
-    @PositiveOrZero(message = "O valor da taxa frete deve ser maior do que zero")
+    @PositiveOrZero(groups = {Groups.CadastroRestaurante.class}, message = "O valor da taxa frete deve ser maior do que zero")
     @Column(name = "TAXA_FRETE")
     private BigDecimal taxaFrete;
 
     @ManyToOne
-    @NotNull(message = "É obrigatório informar uma cozinha")
+    @NotNull(groups = {Groups.CadastroRestaurante.class}, message = "É obrigatório informar uma cozinha")
     @Valid // validação em cascata
     @JoinColumn(name = "COZINHAS_ID")
     private Cozinha cozinha;
