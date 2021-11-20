@@ -4,8 +4,11 @@ package com.algaworks.algafood.api.exceptionhandler;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -20,5 +23,15 @@ public class Problem {
 
     private LocalDateTime timestamp;
     private String userMessage;
+
+    List<Field> fields = new ArrayList<>();
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Field {
+        private String name;
+        private String userMessage;
+    }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -100,9 +101,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ProblemType type = ProblemType.DADOS_INVALIDOS;
 
+
+        BindingResult bindingResult = e.getBindingResult();
+
+        List<Problem.Field> messagesErrorsFields = bindingResult.getFieldErrors().stream().map(fieldError ->
+                Problem.Field.builder()
+                        .name(fieldError.getField())
+                        .userMessage(fieldError.getDefaultMessage())
+                        .build()
+        ).collect(Collectors.toList());
+
         Problem problem =
                 problemBuilder(status, type, e.getMessage())
                         .userMessage("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente")
+                        .fields(messagesErrorsFields)
                         .build();
 
         return handleExceptionInternal(e, problem, headers, status, request);
