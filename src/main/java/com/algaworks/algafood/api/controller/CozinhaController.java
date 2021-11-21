@@ -38,7 +38,7 @@ public class CozinhaController {
 
     @PutMapping("{id}")
     public Cozinha update(@PathVariable Long id,
-                          @RequestBody Cozinha cozinhaBody) {
+                          @RequestBody @Valid Cozinha cozinhaBody) {
 
         cozinhaService.buscarOuFalhar(id);
 

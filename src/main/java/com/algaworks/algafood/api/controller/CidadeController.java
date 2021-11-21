@@ -8,6 +8,7 @@ import com.algaworks.algafood.domain.service.CidadeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class CidadeController {
     }
 
     @PostMapping
-    public Cidade save(@RequestBody Cidade cidade) {
+    public Cidade save(@RequestBody @Valid Cidade cidade) {
         try {
             return cidadeService.save(cidade);
         } catch (EstadoNaoEncontradoException e) {
@@ -42,7 +43,7 @@ public class CidadeController {
 
     @PutMapping("{id}")
     public Cidade update(@PathVariable Long id,
-                         @RequestBody Cidade cidadeBody) {
+                         @RequestBody @Valid Cidade cidadeBody) {
 
         cidadeService.buscarOuFalhar(id);
         try {

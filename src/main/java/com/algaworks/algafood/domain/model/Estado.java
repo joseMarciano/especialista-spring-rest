@@ -1,7 +1,10 @@
 package com.algaworks.algafood.domain.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import com.algaworks.algafood.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,9 +17,11 @@ public class Estado {
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(message = "É obrigatório informar um id", groups = Groups.EstadoId.class)
     private Long id;
 
     @Column(name = "NOME")
+    @NotBlank(message = "É obrigatório informar um nome")
     private String nome;
 
 }
