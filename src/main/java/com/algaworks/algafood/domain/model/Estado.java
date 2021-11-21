@@ -17,11 +17,11 @@ public class Estado {
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(message = "É obrigatório informar um id", groups = Groups.EstadoId.class)
+    @NotNull( groups = Groups.EstadoId.class)
     private Long id;
 
     @Column(name = "NOME")
-    @NotBlank(message = "É obrigatório informar um nome")
+    @NotBlank
     private String nome;
 
 }

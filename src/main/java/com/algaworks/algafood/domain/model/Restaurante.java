@@ -30,19 +30,20 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "É obrigatório informar o nome")
+    @NotBlank
 //    @NotNull
 //    @NotEmpty
     @Column(name = "NOME")
     private String nome;
 
     //    @DecimalMin(value = "1", message = "O valor mínimo da taxa de frete é {value}")
-    @PositiveOrZero(message = "O valor da taxa frete deve ser maior do que zero")
+    @NotNull
+    @PositiveOrZero
     @Column(name = "TAXA_FRETE")
     private BigDecimal taxaFrete;
 
     @ManyToOne
-    @NotNull(message = "É obrigatório informar uma cozinha")
+    @NotNull
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @Valid // validação em cascata
     @JoinColumn(name = "COZINHAS_ID")

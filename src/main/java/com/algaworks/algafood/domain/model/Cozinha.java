@@ -17,15 +17,12 @@ public class Cozinha {
     @EqualsAndHashCode.Include
     @Column(name = "ID", updatable = false)
     @Id
-    @NotNull(
-            groups = {Groups.CozinhaId.class},
-            message = "É obrigatório informar um identificador para cozinha"
-    )
+    @NotNull(groups = {Groups.CozinhaId.class})
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "NOME")
-    @NotBlank(message = "É obrigatório informar o nome da cozinha")
+    @NotBlank
     private String nome;
 //
 //    @OneToMany(mappedBy = "cozinha", orphanRemoval = true)

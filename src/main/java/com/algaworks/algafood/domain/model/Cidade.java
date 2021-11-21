@@ -25,12 +25,12 @@ public class Cidade {
     private Long id;
 
     @Column(name = "NOME")
-    @NotBlank(message = "É obrigatório informar um nome")
+    @NotBlank
     private String nome;
 
     @ManyToOne
     @JoinColumn(name = "ESTADOS_ID")
-    @NotNull(message = "É obrigatório informar um estado")
+    @NotNull
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.EstadoId.class )
     private Estado estado;
