@@ -6,6 +6,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,16 @@ class CadastroCozinhaIT {
                 .port(port)
                 .accept(ContentType.JSON)
                 .when().get().then().statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void deveConter4QuandoConsultarCozinhas() {
+        given()
+                .basePath("/cozinhas")
+                .port(port)
+                .accept(ContentType.JSON)
+                .when().get().then()
+                .body("nome", Matchers.hasSize(5));
     }
 //    @Autowired
 //    private CozinhaService service;
