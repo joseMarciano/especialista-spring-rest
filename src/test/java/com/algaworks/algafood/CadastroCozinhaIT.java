@@ -11,6 +11,11 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -40,6 +45,20 @@ class CadastroCozinhaIT {
                 .accept(ContentType.JSON)
                 .when().get().then()
                 .body("nome", Matchers.hasSize(5));
+    }
+
+    @Test
+    public void deveRetornarStatus201QuandoCadastrarCozinha() throws IOException {
+        String jsonBody = new String(Files.readAllBytes(Paths.get("src/test/resources/cadastroCozinhaBody.json")));
+        given()
+                .body(jsonBody)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.CREATED.value());
+
     }
 //    @Autowired
 //    private CozinhaService service;
