@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,16 +34,19 @@ public class EstadoService {
         return estadoRepository.buscarOuFalhar(id);
     }
 
+    @Transactional
     public Estado save(Estado estado) {
         return estadoRepository.save(estado);
     }
 
+    @Transactional
     public ResponseEntity<Estado> update(Long id,
                                          Estado estadoBody) {
         if (find(id) == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(estadoRepository.save(estadoBody));
     }
 
+    @Transactional
     public void remove(Long id) {
         try {
             estadoRepository.deleteById(id);

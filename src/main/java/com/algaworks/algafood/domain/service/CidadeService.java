@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class CidadeService {
         return cidadeRepository.buscarOuFalhar(id);
     }
 
+    @Transactional
     public Cidade save(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
 
@@ -45,12 +47,14 @@ public class CidadeService {
         return cidadeRepository.save(cidade);
     }
 
+    @Transactional
     public ResponseEntity<Cidade> update(Long id,
                                          Cidade cidadeBody) {
         if (find(id) == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(cidadeRepository.save(cidadeBody));
     }
 
+    @Transactional
     public void remove(Long id) {
         try {
             cidadeRepository.deleteById(id);

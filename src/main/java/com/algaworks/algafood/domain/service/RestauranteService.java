@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class RestauranteService {
         return restauranteRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Restaurante save(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
 
@@ -42,12 +44,14 @@ public class RestauranteService {
         return restauranteRepository.save(restaurante);
     }
 
+    @Transactional
     public ResponseEntity<Restaurante> update(Long id,
                                               Restaurante restauranteBody) {
         if (find(id) == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(restauranteRepository.save(restauranteBody));
     }
 
+    @Transactional
     public void remove(Long id) {
         try {
             restauranteRepository.deleteById(id);
