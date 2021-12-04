@@ -15,6 +15,7 @@ import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,10 +65,10 @@ public class Restaurante {
 
     @CreationTimestamp
     @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataCadastro;
+    private OffsetDateTime dataCadastro;
 
     @UpdateTimestamp
     @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataAtualizacao;
+    private OffsetDateTime dataAtualizacao;
 
 }
