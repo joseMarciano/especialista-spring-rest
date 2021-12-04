@@ -3,7 +3,7 @@ spring:
     #    url: jdbc:mysql://localhost:3306/algafood?serverTimezone=UT
     #    driver-class-name: com.mysql.cj.jdbc.Driver
     #    password: admin
-    url: jdbc:mariadb://172.17.0.3:3306/algafood?serverTimezone=UT
+    url: jdbc:mariadb://172.17.0.3:3306/algafood?serverTimezone=UTC
     username: root
     driver-class-name: org.mariadb.jdbc.Driver
 

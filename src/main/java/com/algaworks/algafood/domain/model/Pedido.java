@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +33,16 @@ public class Pedido {
 
     @CreationTimestamp
     @Column(name = "DATA_CRIACAO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "DATA_CONFIRMACAO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataConfirmacao;
+    private OffsetDateTime dataConfirmacao;
 
     @Column(name = "DATA_CANCELAMENTO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataCancelamento;
+    private OffsetDateTime dataCancelamento;
 
     @Column(name = "DATA_ENTREGA", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataEntrega;
+    private OffsetDateTime dataEntrega;
 
     @Column(name = "STATUS_PEDIDO")
     private StatusPedido statusPedido;

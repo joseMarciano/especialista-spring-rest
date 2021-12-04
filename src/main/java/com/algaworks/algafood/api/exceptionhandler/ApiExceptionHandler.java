@@ -24,7 +24,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -221,10 +221,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (Objects.isNull(body)) {
             body = Problem.builder()
                     .status(status.value())
+                    .timestamp(OffsetDateTime.now())
                     .detail(status.getReasonPhrase())
                     .build();
         } else if (body instanceof String) {
             body = Problem.builder()
+                    .timestamp(OffsetDateTime.now())
                     .status(status.value())
                     .detail(ex.getMessage())
                     .build();
@@ -236,7 +238,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ProblemBuilder problemBuilder(HttpStatus status, ProblemType type, String detail) {
         return Problem.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(OffsetDateTime.now())
                 .userMessage("Ocorreu um erro no servidor")
                 .status(status.value())
                 .type(type.getUri())

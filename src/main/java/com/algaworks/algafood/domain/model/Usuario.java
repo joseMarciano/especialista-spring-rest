@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +34,11 @@ public class Usuario {
 
     @CreationTimestamp
     @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataCadastro;
+    private OffsetDateTime dataCadastro;
 
     @UpdateTimestamp
     @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataAtualizacao;
+    private OffsetDateTime dataAtualizacao;
 
 
     @ManyToMany
