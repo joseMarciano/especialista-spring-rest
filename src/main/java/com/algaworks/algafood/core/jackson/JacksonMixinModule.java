@@ -1,7 +1,5 @@
 package com.algaworks.algafood.core.jackson;
 
-import com.algaworks.algafood.api.mode.mixin.RestauranteMixin;
-import com.algaworks.algafood.domain.model.Restaurante;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +8,8 @@ public class JacksonMixinModule extends SimpleModule {
 
 
     public JacksonMixinModule() {
-        setMixInAnnotation(Restaurante.class, RestauranteMixin.class);
+        for (MixinsMapped mixin : MixinsMapped.values()) {
+            setMixInAnnotation(mixin.getTarget(), mixin.getMixinClass());
+        }
     }
 }

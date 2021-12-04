@@ -178,8 +178,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType type = ProblemType.MENSAGEM_INCOMPREENSIVEL;
         Problem problem =
                 problemBuilder(status, type, null)
-                        .detail(String.format("A propriedade '%s' é inválida",
-                                rootCause.getPropertyName()))
+                        .detail(String.format("A propriedade '%s.%s' é inválida",
+                                rootCause.getReferringClass().getSimpleName(), rootCause.getPropertyName()))
                         .build();
 
 
