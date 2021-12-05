@@ -31,7 +31,11 @@ public class RestauranteController {
 
     @GetMapping("{id}")
     public Restaurante find(@PathVariable Long id) {
-        return restauranteService.buscarOuFalhar(id);
+        Restaurante restaurante = restauranteService.buscarOuFalhar(id);
+
+        System.out.println("Testando");
+
+        return restaurante;
     }
 
     @PostMapping
