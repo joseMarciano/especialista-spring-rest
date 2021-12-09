@@ -1,8 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import com.algaworks.algafood.core.validation.Groups;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,11 +18,12 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
+@javax.persistence.Entity
 @Table(name = "RESTAURANTES")
-public class Restaurante {
+public class Restaurante extends Entity {
 
     @EqualsAndHashCode.Include
     @Id

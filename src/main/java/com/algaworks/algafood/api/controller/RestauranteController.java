@@ -1,5 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.model.Restaurante.RestauranteRepresentation;
+import com.algaworks.algafood.core.rest.RepresentationProvider;
+import com.algaworks.algafood.core.rest.RequestModel;
+import com.algaworks.algafood.core.rest.ResponseModel;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
@@ -15,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("restaurantes")
+
 public class RestauranteController {
 
     private final RestauranteService restauranteService;
@@ -32,13 +37,13 @@ public class RestauranteController {
     @GetMapping("{id}")
     public Restaurante find(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
-
         System.out.println("Testando");
 
         return restaurante;
     }
 
     @PostMapping
+    @RequestModel(representation = RestauranteRepresentation.Completa.class)
     public Restaurante save(@RequestBody @Valid Restaurante restaurante) {
         try {
             return restauranteService.save(restaurante);

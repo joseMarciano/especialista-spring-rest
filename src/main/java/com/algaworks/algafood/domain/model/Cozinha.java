@@ -11,9 +11,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
+@javax.persistence.Entity
 @Table(name = "COZINHAS")
-public class Cozinha {
+public class Cozinha extends Entity {
 
     @EqualsAndHashCode.Include
     @Column(name = "ID", updatable = false)

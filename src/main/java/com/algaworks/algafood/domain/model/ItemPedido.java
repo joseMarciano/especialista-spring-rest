@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 
 @Entity
