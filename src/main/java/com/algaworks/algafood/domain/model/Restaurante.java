@@ -31,12 +31,9 @@ public class Restaurante {
     private Long id;
 
     @NotBlank
-//    @NotNull
-//    @NotEmpty
     @Column(name = "NOME")
     private String nome;
 
-    //    @DecimalMin(value = "1", message = "O valor mínimo da taxa de frete é {value}")
     @NotNull
     @PositiveOrZero
     @Column(name = "TAXA_FRETE")
@@ -70,5 +67,18 @@ public class Restaurante {
     @UpdateTimestamp
     @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
     private OffsetDateTime dataAtualizacao;
+
+    @Column(name = "FL_ATIVO")
+    private Boolean ativo = Boolean.TRUE;
+
+    public Restaurante ativar() {
+        this.setAtivo(true);
+        return this;
+    }
+
+    public Restaurante inativar() {
+        this.setAtivo(false);
+        return this;
+    }
 
 }

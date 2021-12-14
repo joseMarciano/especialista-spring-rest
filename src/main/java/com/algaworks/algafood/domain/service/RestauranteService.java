@@ -66,4 +66,16 @@ public class RestauranteService {
     public Restaurante buscarOuFalhar(Long id) {
         return restauranteRepository.buscarOuFalhar(id);
     }
+
+    public void ativar(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        restaurante.ativar();
+        restauranteRepository.save(restaurante);
+    }
+
+    public void inativar(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        restaurante.inativar();
+        restauranteRepository.save(restaurante);
+    }
 }

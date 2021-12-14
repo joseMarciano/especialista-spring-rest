@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
-import com.algaworks.algafood.api.model.restaurante.RestauranteCompleta;
-import com.algaworks.algafood.api.model.restaurante.RestauranteListagem;
+import com.algaworks.algafood.api.model.restaurante.RestauranteRepresentation;
 import com.algaworks.algafood.core.mapper.RequestMappedEntity;
 import com.algaworks.algafood.core.mapper.ResponseMappedEntity;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradoException;
@@ -12,6 +11,7 @@ import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.service.RestauranteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,13 +29,13 @@ public class RestauranteController {
 
 
     @GetMapping
-    @ResponseMappedEntity(mappedClass = RestauranteCompleta.class)
+    @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteListagem.class)
     public List<Restaurante> listAll() {
         return restauranteService.listAll();
     }
 
     @GetMapping("{id}")
-    @ResponseMappedEntity(mappedClass = RestauranteCompleta.class)
+    @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
     public Restaurante find(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
         System.out.println("Testando");
@@ -44,8 +44,8 @@ public class RestauranteController {
     }
 
     @PostMapping
-    @RequestMappedEntity(mappedClass = RestauranteCompleta.class)
-    @ResponseMappedEntity(mappedClass = RestauranteListagem.class)
+    @RequestMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
+    @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteListagem.class)
     public Restaurante save(@RequestBody @Valid Restaurante restaurante) {
         try {
             return restauranteService.save(restaurante);
@@ -63,6 +63,20 @@ public class RestauranteController {
         } catch (CozinhaNaoEncontradoException e) {
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    @Transactional
+    @PutMapping("{restauranteId}/ativar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable Long restauranteId) {
+        restauranteService.ativar(restauranteId);
+    }
+
+    @Transactional
+    @PutMapping("{restauranteId}/inativar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativar(@PathVariable Long restauranteId) {
+        restauranteService.inativar(restauranteId);
     }
 
     @DeleteMapping("{id}")
