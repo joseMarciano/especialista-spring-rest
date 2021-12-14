@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ public class FormaPagamento {
     private Long id;
 
     @Column(name = "DESCRICAO")
+    @NotBlank(message = "É obrigatório informar uma descrição para a forma de pagamento")
     private String descricao;
 
 }
