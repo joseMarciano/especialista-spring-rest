@@ -38,14 +38,12 @@ public class RestauranteController {
     @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
     public Restaurante find(@PathVariable Long id) {
         Restaurante restaurante = restauranteService.buscarOuFalhar(id);
-        System.out.println("Testando");
-
         return restaurante;
     }
 
     @PostMapping
     @RequestMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
-    @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteListagem.class)
+    @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
     public Restaurante save(@RequestBody @Valid Restaurante restaurante) {
         try {
             return restauranteService.save(restaurante);
@@ -55,6 +53,8 @@ public class RestauranteController {
     }
 
     @PutMapping("{id}")
+    @RequestMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
+    @ResponseMappedEntity(mappedClass = RestauranteRepresentation.RestauranteCompleta.class)
     public Restaurante update(@PathVariable Long id,
                               @RequestBody Restaurante restauranteBody) {
         restauranteService.buscarOuFalhar(id);
