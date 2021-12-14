@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +25,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -101,6 +103,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problem problem =
                 problemBuilder(status, type, e.getMessage())
+                        .build();
+
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, webRequest);
+    }
+
+    @ExceptionHandler({JpaObjectRetrievalFailureException.class})
+    public ResponseEntity<?> handleEntityNotFoundException(JpaObjectRetrievalFailureException e, WebRequest webRequest) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ProblemType type = ProblemType.ERRO_DE_SISTEMA;
+        String message = e.getMessage();
+
+        Throwable rootCause = ExceptionUtils.getRootCause(e);
+
+        if (rootCause instanceof EntityNotFoundException ex) {
+            status = HttpStatus.BAD_REQUEST;
+            type = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+            message = ex.getMessage();
+        }
+
+        Problem problem =
+                problemBuilder(status, type, message)
                         .build();
 
         return handleExceptionInternal(e, problem, new HttpHeaders(), status, webRequest);
