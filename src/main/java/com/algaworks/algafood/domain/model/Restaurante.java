@@ -57,7 +57,7 @@ public class Restaurante {
     private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurante", orphanRemoval = true)
-    private List<Produto> produtos;
+    private Set<Produto> produtos = new HashSet<>();
 
     @Embedded
     private Endereco endereco;

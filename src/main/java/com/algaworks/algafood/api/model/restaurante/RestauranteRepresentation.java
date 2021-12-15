@@ -38,5 +38,9 @@ public interface RestauranteRepresentation {
         private EnderecoRepresentation.Listagem endereco;
     }
 
-
+    @Getter
+    @Setter
+    public class Associacao {
+        private Long id;
+    }
 }
