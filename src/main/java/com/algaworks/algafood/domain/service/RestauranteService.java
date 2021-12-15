@@ -1,10 +1,11 @@
 package com.algaworks.algafood.domain.service;
 
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.RestauranteNaoEncontradoException;
+import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
+import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,11 +20,13 @@ import java.util.List;
 public class RestauranteService {
 
     private final RestauranteRepository restauranteRepository;
+    private final FormaPagamentoRepository formaPagamentoRepository;
     private final CozinhaRepository cozinhaRepository;
 
     public RestauranteService(RestauranteRepository restauranteRepository,
-                              CozinhaRepository cozinhaRepository) {
+                              FormaPagamentoRepository formaPagamentoRepository, CozinhaRepository cozinhaRepository) {
         this.restauranteRepository = restauranteRepository;
+        this.formaPagamentoRepository = formaPagamentoRepository;
         this.cozinhaRepository = cozinhaRepository;
     }
 
@@ -65,6 +68,20 @@ public class RestauranteService {
 
     public Restaurante buscarOuFalhar(Long id) {
         return restauranteRepository.buscarOuFalhar(id);
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = restauranteRepository.buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoRepository.buscarOuFalhar(formaPagamentoId);
+        restauranteRepository.desassociarFormaPagamento(restaurante.getId(), formaPagamento.getId());
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = restauranteRepository.buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = formaPagamentoRepository.buscarOuFalhar(formaPagamentoId);
+        restaurante.associarFormaPagamento(formaPagamento); //NÃO PRECISO DAR UM SAVE POIS O HIBERNATE JÁ FAZ ISSO QUANDO TERMINA O MÉTODO TRANSACIONADO
     }
 
     public void ativar(Long restauranteId) {

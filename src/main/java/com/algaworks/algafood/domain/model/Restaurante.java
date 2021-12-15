@@ -17,7 +17,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -52,7 +54,7 @@ public class Restaurante {
             joinColumns = @JoinColumn(name = "RESTAURANTES_ID"),
             inverseJoinColumns = @JoinColumn(name = "FORMAS_PAGAMENTO_ID")
     )
-    private List<FormaPagamento> formasPagamento = new ArrayList<>();
+    private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
     @OneToMany(mappedBy = "restaurante", orphanRemoval = true)
     private List<Produto> produtos;
@@ -78,6 +80,11 @@ public class Restaurante {
 
     public Restaurante inativar() {
         this.setAtivo(false);
+        return this;
+    }
+
+    public Restaurante associarFormaPagamento(FormaPagamento formaPagamento) {
+        this.formasPagamento.add(formaPagamento);
         return this;
     }
 
