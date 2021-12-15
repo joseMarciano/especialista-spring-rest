@@ -4,9 +4,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,26 +24,25 @@ public class Usuario {
     private Long id;
 
     @Column(name = "NOME")
+    @NotBlank(message = "É obrigatório informar um nome de usuário")
     private String nome;
 
     @Column(name = "EMAIL")
+    @NotBlank(message = "É obrigatório informar um e-mail de usuário")
     private String email;
 
     @Column(name = "SENHA")
+    @NotBlank(message = "É obrigatório informar uma senha de usuário")
     private String senha;
 
     @CreationTimestamp
-    @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)")
+    @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)", updatable = false)
     private OffsetDateTime dataCadastro;
-
-    @UpdateTimestamp
-    @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
-    private OffsetDateTime dataAtualizacao;
 
 
     @ManyToMany
     @JoinTable(
-            name = "USUARIOS_PERMISSOES",
+            name = "USUARIOS_GRUPOS",
             joinColumns = @JoinColumn(name = "USUARIOS_ID"),
             inverseJoinColumns = @JoinColumn(name = "GRUPOS_ID")
     )
