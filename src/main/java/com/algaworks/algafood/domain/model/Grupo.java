@@ -26,14 +26,6 @@ public class Grupo {
     @Column(name = "NOME")
     private String nome;
 
-    @CreationTimestamp
-    @Column(name = "DATA_CADASTRO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataCadastro;
-
-    @UpdateTimestamp
-    @Column(name = "DATA_ATUALIZACAO", columnDefinition = "DATETIME(0)")
-    private LocalDateTime dataAtualizacao;
-
     @ManyToMany
     @JoinTable(
             name = "GRUPOS_PERMISSOES",
