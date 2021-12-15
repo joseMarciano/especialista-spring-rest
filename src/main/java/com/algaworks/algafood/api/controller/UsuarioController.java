@@ -5,6 +5,7 @@ import com.algaworks.algafood.core.mapper.RequestMappedEntity;
 import com.algaworks.algafood.core.mapper.ResponseMappedEntity;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
+import com.algaworks.algafood.domain.exception.NegocioException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
@@ -44,6 +45,11 @@ public class UsuarioController {
     @PutMapping("{id}")
     @RequestMappedEntity(mappedClass = UsuarioRepresentation.Completa.class)
     public void update(@RequestBody Usuario usuario) {
+        Boolean hasDuplicatedEmail = usuarioRepository.existsByEmail(usuario.getEmail(), usuario.getId()) > 0;
+
+        if (hasDuplicatedEmail)
+            throw new NegocioException("Já existe um usuário com o e-email informado");
+
         usuarioRepository.save(usuario);
     }
 
@@ -58,6 +64,11 @@ public class UsuarioController {
     @ResponseMappedEntity(mappedClass = UsuarioRepresentation.Listagem.class)
     @RequestMappedEntity(mappedClass = UsuarioRepresentation.Completa.class)
     public Usuario save(@RequestBody Usuario usuario) {
+        Boolean hasDuplicatedEmail = usuarioRepository.existsByEmail(usuario.getEmail()) > 0;
+
+        if (hasDuplicatedEmail)
+            throw new NegocioException("Já existe um usuário com o e-email informado");
+
         return usuarioRepository.save(usuario);
     }
 
