@@ -26,6 +26,7 @@ public interface RestauranteRepresentation {
         private OffsetDateTime dataCadastro;
         private OffsetDateTime dataAtualizacao;
         private Boolean ativo;
+        private Boolean aberto;
 
     }
 

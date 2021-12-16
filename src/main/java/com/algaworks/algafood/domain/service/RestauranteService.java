@@ -95,4 +95,16 @@ public class RestauranteService {
         restaurante.inativar();
         restauranteRepository.save(restaurante);
     }
+
+    public void fechar(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        restaurante.fechar();
+        restauranteRepository.save(restaurante);
+    }
+
+    public void abrir(Long restauranteId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        restaurante.abrir();
+        restauranteRepository.save(restaurante);
+    }
 }

@@ -73,6 +73,9 @@ public class Restaurante {
     @Column(name = "FL_ATIVO")
     private Boolean ativo = Boolean.TRUE;
 
+    @Column(name = "FL_ABERTO")
+    private Boolean aberto = Boolean.TRUE;
+
     public Restaurante ativar() {
         this.setAtivo(true);
         return this;
@@ -88,4 +91,13 @@ public class Restaurante {
         return this;
     }
 
+    public Restaurante fechar() {
+        this.setAberto(false);
+        return this;
+    }
+
+    public Restaurante abrir() {
+        this.setAberto(true);
+        return this;
+    }
 }
