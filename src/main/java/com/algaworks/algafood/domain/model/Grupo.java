@@ -3,14 +3,13 @@ package com.algaworks.algafood.domain.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 @Entity
 @Table(name = "GRUPOS")
@@ -34,6 +33,25 @@ public class Grupo {
             joinColumns = @JoinColumn(name = "GRUPOS_ID"),
             inverseJoinColumns = @JoinColumn(name = "PERMISSOES_ID")
     )
-    private List<Permissao> permissoes = new ArrayList<>();
+    private Set<Permissao> permissoes = new HashSet<>();
 
+    public Grupo associar(Permissao... p) {
+        Iterator<Permissao> iterator = Arrays.stream(p).iterator();
+
+        while (iterator.hasNext()) {
+            this.permissoes.add(iterator.next());
+        }
+
+        return this;
+    }
+
+    public Grupo desassociar(Permissao... p) {
+        Iterator<Permissao> iterator = Arrays.stream(p).iterator();
+
+        while (iterator.hasNext()) {
+            this.permissoes.remove(iterator.next());
+        }
+
+        return this;
+    }
 }
