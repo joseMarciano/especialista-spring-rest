@@ -32,7 +32,7 @@ public class Pedido {
     private BigDecimal valorTotal;
 
     @CreationTimestamp
-    @Column(name = "DATA_CRIACAO", columnDefinition = "DATETIME(0)")
+    @Column(name = "DATA_CRIACAO", updatable = false, columnDefinition = "DATETIME(0)")
     private OffsetDateTime dataCriacao;
 
     @Column(name = "DATA_CONFIRMACAO", columnDefinition = "DATETIME(0)")
@@ -48,7 +48,7 @@ public class Pedido {
     private StatusPedido statusPedido;
 
     @ManyToOne
-    @JoinColumn(name = "CLIENTES_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "USUARIOS_ID", referencedColumnName = "ID")
     private Usuario cliente;
 
     @ManyToOne

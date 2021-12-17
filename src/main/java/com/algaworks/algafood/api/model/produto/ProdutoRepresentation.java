@@ -38,4 +38,11 @@ public interface ProdutoRepresentation {
         private boolean ativo;
         private RestauranteRepresentation.Associacao restaurante;
     }
+
+    @Getter
+    @Setter
+    public class AssociacaoItemPedido {
+        private Long id;
+        private String nome;
+    }
 }

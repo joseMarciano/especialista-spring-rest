@@ -19,4 +19,10 @@ public interface FormaPagamentoRepresentation {
         private String descricao;
     }
 
+    @Getter
+    @Setter
+    public class AssociacaoPedido {
+        private Long id;
+        private String descricao;
+    }
 }

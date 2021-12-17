@@ -44,4 +44,11 @@ public interface RestauranteRepresentation {
     public class Associacao {
         private Long id;
     }
+
+    @Getter
+    @Setter
+    public class AssociacaoPedido {
+        private Long id;
+        private String nome;
+    }
 }

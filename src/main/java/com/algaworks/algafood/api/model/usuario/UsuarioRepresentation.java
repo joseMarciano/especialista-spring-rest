@@ -22,4 +22,10 @@ public interface UsuarioRepresentation {
         private String senha;
     }
 
+    @Getter
+    @Setter
+    public class AssociacaoPedido {
+        private Long id;
+        private String nome;
+    }
 }
