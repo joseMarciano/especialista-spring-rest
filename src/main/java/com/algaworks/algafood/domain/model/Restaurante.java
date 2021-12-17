@@ -14,11 +14,10 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Set;
 
 @Data
@@ -76,6 +75,19 @@ public class Restaurante {
     @Column(name = "FL_ABERTO")
     private Boolean aberto = Boolean.TRUE;
 
+    @ManyToMany
+//    @JoinTable(
+//            name = "GRUPOS_PERMISSOES",
+//            joinColumns = @JoinColumn(name = "GRUPOS_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "PERMISSOES_ID")
+//    )
+    @JoinTable(
+            name = "USUARIOS_RESTAURANTES_RESPONSAVEIS",
+            joinColumns = @JoinColumn(name = "RESTAURANTES_ID"),
+            inverseJoinColumns = @JoinColumn(name = "USUARIOS_ID")
+    )
+    private Set<Usuario> usuarios = new HashSet<>();
+
     public Restaurante ativar() {
         this.setAtivo(true);
         return this;
@@ -100,4 +112,26 @@ public class Restaurante {
         this.setAberto(true);
         return this;
     }
+
+    public Restaurante atribuirResponsavel(Usuario ...u) {
+        Iterator<Usuario> iterator = Arrays.stream(u).iterator();
+
+        while (iterator.hasNext()) {
+            this.usuarios.add(iterator.next());
+        }
+
+        return this;
+    }
+
+    public Restaurante desassociarResponsavel(Usuario ...u) {
+        Iterator<Usuario> iterator = Arrays.stream(u).iterator();
+
+        while (iterator.hasNext()) {
+            this.usuarios.remove(iterator.next());
+        }
+
+        return this;
+    }
+
+
 }
