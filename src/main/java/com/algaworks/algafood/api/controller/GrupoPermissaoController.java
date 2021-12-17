@@ -14,13 +14,13 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/grupos/{grupoId}/permissoes")
-public class GrupoPermissaoControllerController {
+public class GrupoPermissaoController {
 
     private final GrupoRepository grupoRepository;
     private final PermissaoRepository permissaoRepository;
 
-    public GrupoPermissaoControllerController(GrupoRepository grupoRepository,
-                                              PermissaoRepository permissaoRepository) {
+    public GrupoPermissaoController(GrupoRepository grupoRepository,
+                                    PermissaoRepository permissaoRepository) {
         this.grupoRepository = grupoRepository;
         this.permissaoRepository = permissaoRepository;
     }

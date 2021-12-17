@@ -8,8 +8,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 @Entity
 @Table(name = "USUARIOS")
@@ -46,6 +48,25 @@ public class Usuario {
             joinColumns = @JoinColumn(name = "USUARIOS_ID"),
             inverseJoinColumns = @JoinColumn(name = "GRUPOS_ID")
     )
-    private List<Grupo> grupos = new ArrayList<>();
+    private Set<Grupo> grupos = new HashSet<>();
 
+    public Usuario associar(Grupo... grupos) {
+        Iterator<Grupo> iterator = Arrays.stream(grupos).iterator();
+
+        while (iterator.hasNext()) {
+            this.grupos.add(iterator.next());
+        }
+
+        return this;
+    }
+
+    public Usuario desassociar(Grupo... grupos) {
+        Iterator<Grupo> iterator = Arrays.stream(grupos).iterator();
+
+        while (iterator.hasNext()) {
+            this.grupos.remove(iterator.next());
+        }
+
+        return this;
+    }
 }
