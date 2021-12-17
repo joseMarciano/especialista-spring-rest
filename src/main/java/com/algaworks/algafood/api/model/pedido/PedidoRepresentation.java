@@ -30,7 +30,20 @@ public interface PedidoRepresentation {
         private UsuarioRepresentation.AssociacaoPedido cliente;
         private RestauranteRepresentation.AssociacaoPedido restaurante;
         private FormaPagamentoRepresentation.AssociacaoPedido formaPagamento;
-        private List<ItemPedidoRepresentation.AssociacaoPedido> itensPedido = new ArrayList<>();
+        private List<ItemPedidoRepresentation.AssociacaoPedido> itensPedido;
         private EnderecoRepresentation.AssociacaoPedido endereco;
+    }
+
+    @Getter
+    @Setter
+    class ListagemResumida {
+        private Long id;
+        private BigDecimal subTotal;
+        private BigDecimal taxaFrete;
+        private BigDecimal valorTotal;
+        private OffsetDateTime dataCriacao;
+        private StatusPedido statusPedido;
+        private UsuarioRepresentation.AssociacaoPedido cliente;
+        private RestauranteRepresentation.AssociacaoPedido restaurante;
     }
 }

@@ -25,7 +25,7 @@ public class PedidoController {
 
 
     @GetMapping
-    @ResponseMappedEntity(mappedClass = PedidoRepresentation.Listagem.class)
+    @ResponseMappedEntity(mappedClass = PedidoRepresentation.ListagemResumida.class)
     public List<Pedido> listAll() {
         return pedidoRepository.findAll();
     }

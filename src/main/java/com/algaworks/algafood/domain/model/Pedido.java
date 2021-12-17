@@ -10,6 +10,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "PEDIDOS")
 @Data
@@ -47,15 +49,15 @@ public class Pedido {
     @Column(name = "STATUS_PEDIDO")
     private StatusPedido statusPedido;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USUARIOS_ID", referencedColumnName = "ID")
     private Usuario cliente;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "RESTAURANTES_ID", referencedColumnName = "ID")
     private Restaurante restaurante;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "FORMAS_PAGAMENTO_ID", referencedColumnName = "ID")
     private FormaPagamento formaPagamento;
 

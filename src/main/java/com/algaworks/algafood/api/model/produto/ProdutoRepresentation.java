@@ -41,7 +41,7 @@ public interface ProdutoRepresentation {
 
     @Getter
     @Setter
-    public class AssociacaoItemPedido {
+    class AssociacaoItemPedido {
         private Long id;
         private String nome;
     }
