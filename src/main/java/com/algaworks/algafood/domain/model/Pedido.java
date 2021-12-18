@@ -10,10 +10,9 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import static com.algaworks.algafood.domain.model.StatusPedido.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -68,7 +67,7 @@ public class Pedido {
     @JoinColumn(name = "FORMAS_PAGAMENTO_ID", referencedColumnName = "ID")
     private FormaPagamento formaPagamento;
 
-    @OneToMany(mappedBy = "pedido", orphanRemoval = true,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", orphanRemoval = true, cascade = CascadeType.ALL)
     @Size(min = 1, message = "É obrigatório ter pelo menos {min} item no pedido")
     List<ItemPedido> itensPedido = new ArrayList<>();
 
@@ -82,5 +81,35 @@ public class Pedido {
         BigDecimal total = this.itensPedido.stream().map(ItemPedido::getPrecoTotal).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
         this.setSubTotal(total);
         this.setValorTotal(total.add(this.getTaxaFrete()));
+    }
+
+    public boolean tramitarStatus(StatusPedido proximoStatus) {
+        StatusPedido statusAtual = this.statusPedido;
+
+
+        if (CRIADO.equals(statusAtual) && !CONFIRMADO.equals(proximoStatus)) return false;
+        if (statusAtual != null && !CRIADO.equals(statusAtual) && CRIADO.equals(proximoStatus)) return false;
+        if (ENTREGUE.equals(statusAtual) && CANCELADO.equals(proximoStatus)) return false;
+        if (CANCELADO.equals(statusAtual) && CONFIRMADO.equals(proximoStatus)) return false;
+
+        if (CRIADO.equals(proximoStatus)) {
+            this.setDataCriacao(OffsetDateTime.now());
+        }
+
+        if (CONFIRMADO.equals(proximoStatus)) {
+            this.setDataConfirmacao(OffsetDateTime.now());
+        }
+
+        if (ENTREGUE.equals(proximoStatus)) {
+            this.setDataEntrega(OffsetDateTime.now());
+        }
+
+        if (CANCELADO.equals(proximoStatus)) {
+            this.setDataCancelamento(OffsetDateTime.now());
+        }
+
+
+        this.setStatusPedido(proximoStatus);
+        return true;
     }
 }

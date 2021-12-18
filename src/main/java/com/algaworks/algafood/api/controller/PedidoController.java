@@ -4,8 +4,10 @@ import com.algaworks.algafood.api.model.pedido.PedidoRepresentation;
 import com.algaworks.algafood.core.mapper.RequestMappedEntity;
 import com.algaworks.algafood.core.mapper.ResponseMappedEntity;
 import com.algaworks.algafood.domain.model.Pedido;
+import com.algaworks.algafood.domain.model.StatusPedido;
 import com.algaworks.algafood.domain.repository.PedidoRepository;
 import com.algaworks.algafood.domain.service.PedidoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,5 +43,12 @@ public class PedidoController {
     @RequestMappedEntity(mappedClass = PedidoRepresentation.Completa.class)
     public void emitir(@RequestBody @Valid Pedido pedido) {
         pedidoService.emitir(pedido);
+    }
+
+    @PutMapping("{id}/tramitar")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void tramitar(@RequestParam StatusPedido statusPedido,@PathVariable Long id) {
+        Pedido pedido = pedidoRepository.buscarOuFalhar(id);
+        pedidoService.tramitar(pedido,statusPedido);
     }
 }

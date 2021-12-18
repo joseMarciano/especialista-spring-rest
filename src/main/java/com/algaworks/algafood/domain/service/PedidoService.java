@@ -6,6 +6,7 @@ import com.algaworks.algafood.domain.repository.*;
 import org.springframework.stereotype.Service;
 
 import static com.algaworks.algafood.domain.model.StatusPedido.CRIADO;
+import static java.lang.String.format;
 
 @Service
 public class PedidoService {
@@ -56,7 +57,7 @@ public class PedidoService {
         pedido.setCliente(usuario);
         pedido.setFormaPagamento(formaPagamento);
         pedido.setTaxaFrete(restaurante.getTaxaFrete());
-        pedido.setStatusPedido(CRIADO);
+        pedido.tramitarStatus(CRIADO);
 
         if (!restaurante.getFormasPagamento().contains(formaPagamento))
             throw new NegocioException("Forma de pagamento não é aceita pelo restaurante");
@@ -65,4 +66,14 @@ public class PedidoService {
     }
 
 
+    public void tramitar(Pedido pedido, StatusPedido statusPedido) {
+        StatusPedido statusAtual = pedido.getStatusPedido();
+        boolean tramitadoComSucesso = pedido.tramitarStatus(statusPedido);
+
+        if(!tramitadoComSucesso){
+            throw new NegocioException(format("Não é possível tramitar de %s para %s",statusAtual,statusPedido));
+        }
+
+        pedidoRepository.save(pedido);
+    }
 }
