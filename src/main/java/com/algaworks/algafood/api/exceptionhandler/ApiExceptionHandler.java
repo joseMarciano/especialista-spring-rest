@@ -138,7 +138,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         List<Problem.Field> messagesErrorsFields =
                 bindingResult.getFieldErrors().stream().map(fieldError -> {
-                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+                    String message = fieldError.getDefaultMessage() == null
+                            ? messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())
+                            : fieldError.getDefaultMessage();
                     return Problem.Field.builder()
                             .name(fieldError.getField())
                             .userMessage(message)

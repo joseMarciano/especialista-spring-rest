@@ -5,10 +5,14 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -50,21 +54,33 @@ public class Pedido {
     private StatusPedido statusPedido;
 
     @ManyToOne(fetch = LAZY)
+    @NotNull(message = "É obrigatório informar um cliente para o pedido")
     @JoinColumn(name = "USUARIOS_ID", referencedColumnName = "ID")
     private Usuario cliente;
 
     @ManyToOne(fetch = LAZY)
+    @NotNull(message = "É obrigatório informar um restaurante para o pedido")
     @JoinColumn(name = "RESTAURANTES_ID", referencedColumnName = "ID")
     private Restaurante restaurante;
 
     @ManyToOne(fetch = LAZY)
+    @NotNull(message = "É obrigatório informar uma forma de pagamento para o pedido")
     @JoinColumn(name = "FORMAS_PAGAMENTO_ID", referencedColumnName = "ID")
     private FormaPagamento formaPagamento;
 
-    @OneToMany(mappedBy = "pedido", orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", orphanRemoval = true,cascade = CascadeType.ALL)
+    @Size(min = 1, message = "É obrigatório ter pelo menos {min} item no pedido")
     List<ItemPedido> itensPedido = new ArrayList<>();
 
     @Embedded
     Endereco endereco;
 
+    public void calcularTotal() {
+        this.itensPedido.forEach(item -> {
+            item.setPrecoTotal(item.getPrecoUnitario().multiply(BigDecimal.valueOf(item.getQuantidade())));
+        });
+        BigDecimal total = this.itensPedido.stream().map(ItemPedido::getPrecoTotal).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+        this.setSubTotal(total);
+        this.setValorTotal(total.add(this.getTaxaFrete()));
+    }
 }

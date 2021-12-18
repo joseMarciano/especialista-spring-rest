@@ -21,8 +21,14 @@ public interface FormaPagamentoRepresentation {
 
     @Getter
     @Setter
-    public class AssociacaoPedido {
+    class AssociacaoPedido {
         private Long id;
         private String descricao;
+    }
+
+    @Getter
+    @Setter
+    class Associacao {
+        private Long id;
     }
 }

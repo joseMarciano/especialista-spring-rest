@@ -45,4 +45,11 @@ public interface ProdutoRepresentation {
         private Long id;
         private String nome;
     }
+
+
+    @Getter
+    @Setter
+    class Associacao {
+        private Long id;
+    }
 }
