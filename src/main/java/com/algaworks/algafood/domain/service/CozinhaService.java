@@ -7,6 +7,8 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +24,8 @@ public class CozinhaService {
         this.cozinhaRepository = cozinhaRepository;
     }
 
-    public List<Cozinha> listAll() {
-        return cozinhaRepository.findAll();
+    public Page<Cozinha> listAll(Pageable pageable) {
+        return cozinhaRepository.findAll(pageable);
     }
 
     public Cozinha find(Long id) {

@@ -1,8 +1,12 @@
 package com.algaworks.algafood.api.controller;
 
 
+import com.algaworks.algafood.api.model.cozinha.CozinhaRepresentation;
+import com.algaworks.algafood.core.mapper.ResponseMappedEntity;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CozinhaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +25,9 @@ public class CozinhaController {
 
 
     @GetMapping
-    public List<Cozinha> listAll() {
-        return cozinhaService.listAll();
+    @ResponseMappedEntity(mappedClass = CozinhaRepresentation.Completa.class)
+    public Page<Cozinha> listAll(Pageable pageable) {
+        return cozinhaService.listAll(pageable);
     }
 
     @GetMapping("{id}")
