@@ -7,13 +7,13 @@ import com.algaworks.algafood.domain.service.VendaQueryService;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Root;
-import java.time.LocalDate;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.algaworks.algafood.domain.model.StatusPedido.CONFIRMADO;
+import static com.algaworks.algafood.domain.model.StatusPedido.ENTREGUE;
 
 @Service
 public class VendaQUeryServiceImpl implements VendaQueryService {
@@ -39,9 +39,36 @@ public class VendaQUeryServiceImpl implements VendaQueryService {
                 criteriaBuilder.sum(from.get("valorTotal"))
         );
 
+        query.where(criteriaBuilder.in(from.get("statusPedido")).value(CONFIRMADO).value(ENTREGUE));
+
+        Predicate[] predicateFilter = getFilter(filter,criteriaBuilder,from);
+
 
         query.select(selection);
         query.groupBy(functionDate);
+
+        query.where(predicateFilter);
+
         return entityManager.createQuery(query).getResultList();
+    }
+
+    private Predicate[] getFilter(VendaDiariaFilter filter, CriteriaBuilder criteriaBuilder, Root<Pedido> from) {
+        var predicates = new ArrayList<Predicate>();
+
+        if(filter.getRestauranteId() != null){
+            predicates.add(criteriaBuilder.equal(from.get("restaurante"),filter.getRestauranteId()));
+        }
+
+        if(filter.getDataCriacaoInicio() != null){
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(from.get("dataCriacao"),filter.getDataCriacaoInicio()));
+        }
+
+
+        if(filter.getDataCriacaoFim() != null){
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(from.get("dataCriacao"),filter.getDataCriacaoFim()));
+        }
+
+
+        return predicates.toArray(new Predicate[]{});
     }
 }
