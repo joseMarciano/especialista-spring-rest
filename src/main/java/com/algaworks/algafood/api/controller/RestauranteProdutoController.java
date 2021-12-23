@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalTime;
@@ -85,9 +86,10 @@ public class RestauranteProdutoController {
     }
 
     @PutMapping(path = "{produtoId}/foto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId,  FotoProdutoDto fotoProdutoDto) throws IOException {
+    public void atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoDto fotoProdutoDto) throws IOException {
 
         MultipartFile file = fotoProdutoDto.getFile();
+//        file.getSize()
         String name = file.getName();
 
         Path filePath = Path.of("/home/jose/JOSEPAULO/algafood-api/src/main/resources/static", name);

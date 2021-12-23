@@ -243,17 +243,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                              HttpHeaders headers,
                                                              HttpStatus status,
                                                              WebRequest request) {
+        String userMessage = "";
+        if(ex instanceof BindingResult bindingResult){
+               userMessage = bindingResult.getFieldError().getDefaultMessage();
+        }
+
         if (Objects.isNull(body)) {
             body = Problem.builder()
                     .status(status.value())
                     .timestamp(OffsetDateTime.now())
                     .detail(status.getReasonPhrase())
+                    .userMessage(userMessage)
                     .build();
         } else if (body instanceof String) {
             body = Problem.builder()
                     .timestamp(OffsetDateTime.now())
                     .status(status.value())
                     .detail(ex.getMessage())
+                    .userMessage(userMessage)
                     .build();
         }
 

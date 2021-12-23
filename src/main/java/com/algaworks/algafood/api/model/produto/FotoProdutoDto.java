@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.model.produto;
 
+import com.algaworks.algafood.core.validation.FileSize;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,5 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FotoProdutoDto {
 
     private String descricao;
+
+    @FileSize(max = "2KB")
     private MultipartFile file;
 }
