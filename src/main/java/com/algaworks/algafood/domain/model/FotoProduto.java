@@ -30,5 +30,5 @@ public class FotoProduto {
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    private Produto produto;
+    private Produto produtos;
 }

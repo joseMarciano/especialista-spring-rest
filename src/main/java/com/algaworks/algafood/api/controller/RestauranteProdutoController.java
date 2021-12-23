@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.api.model.fotoproduto.FotoProdutoRepresentation;
 import com.algaworks.algafood.api.model.produto.FotoProdutoDto;
 import com.algaworks.algafood.api.model.produto.ProdutoRepresentation;
 import com.algaworks.algafood.core.mapper.RequestMappedEntity;
@@ -7,9 +8,11 @@ import com.algaworks.algafood.core.mapper.ResponseMappedEntity;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.ProdutoNaoEncontradoException;
+import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
+import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
 import com.algaworks.algafood.domain.service.RestauranteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.time.LocalTime;
 import java.util.Set;
 
 @RestController
@@ -29,11 +31,13 @@ public class RestauranteProdutoController {
 
     private final RestauranteService restauranteService;
     private final ProdutoRepository produtoRepository;
+    private final CatalogoFotoProdutoService catalogoFotoProdutoService;
 
     public RestauranteProdutoController(RestauranteService restauranteService,
-                                        ProdutoRepository produtoRepository) {
+                                        ProdutoRepository produtoRepository, CatalogoFotoProdutoService catalogoFotoProdutoService) {
         this.restauranteService = restauranteService;
         this.produtoRepository = produtoRepository;
+        this.catalogoFotoProdutoService = catalogoFotoProdutoService;
     }
 
     @GetMapping
@@ -86,16 +90,25 @@ public class RestauranteProdutoController {
     }
 
     @PutMapping(path = "{produtoId}/foto", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid FotoProdutoDto fotoProdutoDto) throws IOException {
+    @ResponseMappedEntity(mappedClass = FotoProdutoRepresentation.Listagem.class)
+    public FotoProduto atualizarFoto(@PathVariable Long restauranteId,
+                                     @PathVariable Long produtoId,
+                                     @Valid FotoProdutoDto fotoProdutoDto) throws IOException {
 
-        MultipartFile file = fotoProdutoDto.getFile();
-//        file.getSize()
-        String name = file.getName();
+        Produto produto = produtoRepository.findByRestauranteId(produtoId,restauranteId);
 
-        Path filePath = Path.of("/home/jose/JOSEPAULO/algafood-api/src/main/resources/static", name);
+        if (produto == null) {
+            throw new ProdutoNaoEncontradoException("O produto solicitado não existe para este restaurante");
+        }
 
-        file.transferTo(filePath);
+        FotoProduto foto = new FotoProduto();
+        foto.setProdutos(produto);
+        foto.setContentType(fotoProdutoDto.getFile().getContentType());
+        foto.setDescricao(fotoProdutoDto.getDescricao());
+        foto.setTamanho(fotoProdutoDto.getFile().getSize());
+        foto.setNome(fotoProdutoDto.getFile().getOriginalFilename());
 
+        return catalogoFotoProdutoService.save(foto);
 
     }
 
