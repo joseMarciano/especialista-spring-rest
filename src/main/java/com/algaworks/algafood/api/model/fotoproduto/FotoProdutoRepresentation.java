@@ -8,6 +8,7 @@ public interface FotoProdutoRepresentation {
     @Getter
     @Setter
     class Listagem {
+        private Long id;
         private String nome;
         private String descricao;
         private String contentType;

@@ -95,11 +95,15 @@ public class RestauranteProdutoController {
                                      @PathVariable Long produtoId,
                                      @Valid FotoProdutoDto fotoProdutoDto) throws IOException {
 
-        Produto produto = produtoRepository.findByRestauranteId(produtoId,restauranteId);
+        Produto produto = produtoRepository.findByRestauranteId(produtoId, restauranteId);
 
         if (produto == null) {
             throw new ProdutoNaoEncontradoException("O produto solicitado não existe para este restaurante");
         }
+
+        FotoProduto fotoProduto = produtoRepository.findFotoById(restauranteId, produtoId);
+
+        if(fotoProduto != null ) produtoRepository.delete(fotoProduto);
 
         FotoProduto foto = new FotoProduto();
         foto.setProdutos(produto);
