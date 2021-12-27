@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Set;
 
-import static com.algaworks.algafood.domain.service.FotoStorage.*;
+import static com.algaworks.algafood.domain.service.FotoStorage.NovaFoto;
 
 @RestController
 @RequestMapping("restaurantes/{restauranteId}/produtos")
@@ -107,8 +107,12 @@ public class RestauranteProdutoController {
         }
 
         FotoProduto fotoProduto = produtoRepository.findFotoById(restauranteId, produtoId);
+        String nomeArquivoAntigo = null;
 
-        if(fotoProduto != null ) produtoRepository.delete(fotoProduto);
+        if (fotoProduto != null) {
+            nomeArquivoAntigo = fotoProduto.getNome();
+            produtoRepository.delete(fotoProduto);
+        }
 
         FotoProduto foto = new FotoProduto();
         foto.setProdutos(produto);
@@ -127,7 +131,7 @@ public class RestauranteProdutoController {
                 .file(fotoProdutoDto.getFile().getInputStream())
                 .build();
 
-        fotoStorageService.armazenar(novaFoto);
+        fotoStorageService.substituir(nomeArquivoAntigo, novaFoto);
 
         return fotoSaved;
 

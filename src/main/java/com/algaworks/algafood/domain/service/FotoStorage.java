@@ -11,9 +11,18 @@ public interface FotoStorage {
 
     void armazenar(NovaFoto novaFoto);
 
+    void remover(String uri);
+
     default String gerarNomeArquivo(String nome){
         String nomeArquivo = Optional.ofNullable(nome).orElseThrow(() -> new RuntimeException("Nome de arquivo inválido"));
         return UUID.randomUUID() + nomeArquivo;
+    }
+
+    default void substituir(String nomeArquivoAntigo, NovaFoto novaFoto){
+        this.armazenar(novaFoto);
+
+        if(nomeArquivoAntigo != null) this.remover(nomeArquivoAntigo);
+
     }
 
     @Builder

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,16 @@ public class LocalFotoStorageService implements FotoStorage {
             FileCopyUtils.copy(novaFoto.getFile(), Files.newOutputStream(arquivoPath));
         } catch (IOException e) {
             throw new StorageException("Não foi possível armazenar arquivo", e);
+        }
+    }
+
+    @Override
+    public void remover(String uri) {
+        Path arquivoPath = getArquivoPath(uri);
+        try {
+            Files.deleteIfExists(arquivoPath);
+        } catch (IOException e) {
+            throw new StorageException("Não foi possível remover o arquivo", e);
         }
     }
 
