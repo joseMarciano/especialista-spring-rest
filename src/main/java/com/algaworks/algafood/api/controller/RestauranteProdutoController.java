@@ -7,6 +7,7 @@ import com.algaworks.algafood.core.mapper.RequestMappedEntity;
 import com.algaworks.algafood.core.mapper.ResponseMappedEntity;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.FotoProdutoNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.ProdutoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.FotoProduto;
 import com.algaworks.algafood.domain.model.Produto;
@@ -134,6 +135,26 @@ public class RestauranteProdutoController {
         fotoStorageService.substituir(nomeArquivoAntigo, novaFoto);
 
         return fotoSaved;
+
+    }
+
+    @GetMapping("{produtoId}/foto")
+    @ResponseMappedEntity(mappedClass = FotoProdutoRepresentation.Listagem.class)
+    FotoProduto getFotoProduto(@PathVariable("restauranteId") Long restauranteId, @PathVariable("produtoId") Long produtoId) {
+        Produto produto = produtoRepository.findByRestauranteId(produtoId, restauranteId);
+
+        if (produto == null) {
+            throw new ProdutoNaoEncontradoException("O produto solicitado não existe para este restaurante");
+        }
+
+        FotoProduto fotoById = produtoRepository.findFotoById(restauranteId, produtoId);
+
+        if (fotoById == null)
+            throw new FotoProdutoNaoEncontradoException(String.format("Não existe um cadastro de foto do produto com código %d para o restaurante de código %d",
+                    produtoId, restauranteId));
+
+
+        return fotoById;
 
     }
 
