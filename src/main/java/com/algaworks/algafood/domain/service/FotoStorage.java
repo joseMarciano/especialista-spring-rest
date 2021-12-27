@@ -13,6 +13,9 @@ public interface FotoStorage {
 
     void remover(String uri);
 
+    InputStream recuperar(String nomeArquivo);
+
+
     default String gerarNomeArquivo(String nome){
         String nomeArquivo = Optional.ofNullable(nome).orElseThrow(() -> new RuntimeException("Nome de arquivo inválido"));
         return UUID.randomUUID() + nomeArquivo;
