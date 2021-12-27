@@ -11,6 +11,6 @@ public class FotoProdutoDto {
 
     private String descricao;
 
-    @FileSize(max = "2KB")
+    @FileSize(max = "10KB")
     private MultipartFile file;
 }

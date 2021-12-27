@@ -13,17 +13,18 @@ import com.algaworks.algafood.domain.model.Produto;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.ProdutoRepository;
 import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
+import com.algaworks.algafood.domain.service.FotoStorage;
 import com.algaworks.algafood.domain.service.RestauranteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Set;
+
+import static com.algaworks.algafood.domain.service.FotoStorage.*;
 
 @RestController
 @RequestMapping("restaurantes/{restauranteId}/produtos")
@@ -32,12 +33,16 @@ public class RestauranteProdutoController {
     private final RestauranteService restauranteService;
     private final ProdutoRepository produtoRepository;
     private final CatalogoFotoProdutoService catalogoFotoProdutoService;
+    private final FotoStorage fotoStorageService;
 
     public RestauranteProdutoController(RestauranteService restauranteService,
-                                        ProdutoRepository produtoRepository, CatalogoFotoProdutoService catalogoFotoProdutoService) {
+                                        ProdutoRepository produtoRepository,
+                                        CatalogoFotoProdutoService catalogoFotoProdutoService,
+                                        FotoStorage fotoStorageService) {
         this.restauranteService = restauranteService;
         this.produtoRepository = produtoRepository;
         this.catalogoFotoProdutoService = catalogoFotoProdutoService;
+        this.fotoStorageService = fotoStorageService;
     }
 
     @GetMapping
@@ -110,9 +115,21 @@ public class RestauranteProdutoController {
         foto.setContentType(fotoProdutoDto.getFile().getContentType());
         foto.setDescricao(fotoProdutoDto.getDescricao());
         foto.setTamanho(fotoProdutoDto.getFile().getSize());
-        foto.setNome(fotoProdutoDto.getFile().getOriginalFilename());
+        foto.setNome(fotoStorageService.gerarNomeArquivo(fotoProdutoDto.getFile().getOriginalFilename()));
 
-        return catalogoFotoProdutoService.save(foto);
+        FotoProduto fotoSaved = catalogoFotoProdutoService.save(foto);
+        produtoRepository.flush();
+
+
+        NovaFoto novaFoto = NovaFoto
+                .builder()
+                .nomeArquivo(fotoSaved.getNome())
+                .file(fotoProdutoDto.getFile().getInputStream())
+                .build();
+
+        fotoStorageService.armazenar(novaFoto);
+
+        return fotoSaved;
 
     }
 
