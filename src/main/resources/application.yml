@@ -34,3 +34,7 @@ spring:
 #logging:
 #  level:
 #    root: ERROR
+algafood:
+  storage:
+    local:
+      diretorio-fotos: "/home/jose/Desktop"
