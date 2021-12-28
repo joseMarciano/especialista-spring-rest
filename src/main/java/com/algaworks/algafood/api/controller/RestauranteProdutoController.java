@@ -160,6 +160,27 @@ public class RestauranteProdutoController {
 
     }
 
+    @DeleteMapping("{produtoId}/foto")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long restauranteId,
+                        @PathVariable Long produtoId) {
+        Produto produto = produtoRepository.findByRestauranteId(produtoId, restauranteId);
+
+        if (produto == null) {
+            throw new ProdutoNaoEncontradoException("O produto solicitado não existe para este restaurante");
+        }
+
+        FotoProduto fotoById = produtoRepository.findFotoById(restauranteId, produtoId);
+
+        if (fotoById == null)
+            throw new FotoProdutoNaoEncontradoException(String.format("Não existe um cadastro de foto do produto com código %d para o restaurante de código %d",
+                    produtoId, restauranteId));
+
+        produtoRepository.delete(fotoById);
+        produtoRepository.flush();
+        fotoStorageService.remover(fotoById.getNome());
+    }
+
     @GetMapping(value = "{produtoId}/foto",produces = MediaType.TEXT_PLAIN_VALUE)
     ResponseEntity<InputStreamResource> servirFoto(@PathVariable("restauranteId") Long restauranteId, @PathVariable("produtoId") Long produtoId) {
         Produto produto = produtoRepository.findByRestauranteId(produtoId, restauranteId);
