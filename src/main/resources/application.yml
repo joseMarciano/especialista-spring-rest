@@ -36,5 +36,12 @@ spring:
 #    root: ERROR
 algafood:
   storage:
+    s3:
+      bucket: app.algafood.cloud
+      id-chave-acesso: AKIAWP7LIUDW5S7DZPUG,
+      chave-acesso-secreta: 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,
+      diretorio: catalogo,
+      regiao: us-east-1
+
     local:
       diretorio-fotos: "/home/jose/Desktop"
