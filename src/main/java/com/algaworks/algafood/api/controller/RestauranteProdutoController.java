@@ -17,6 +17,7 @@ import com.algaworks.algafood.domain.service.CatalogoFotoProdutoService;
 import com.algaworks.algafood.domain.service.FotoStorage;
 import com.algaworks.algafood.domain.service.RestauranteService;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Set;
 
+import static com.algaworks.algafood.domain.service.FotoStorage.FotoRecuperada;
 import static com.algaworks.algafood.domain.service.FotoStorage.NovaFoto;
 
 @RestController
@@ -182,7 +183,7 @@ public class RestauranteProdutoController {
         fotoStorageService.remover(fotoById.getNome());
     }
 
-    @GetMapping(value = "{produtoId}/foto",produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "{produtoId}/foto", produces = MediaType.TEXT_PLAIN_VALUE)
     ResponseEntity<InputStreamResource> servirFoto(@PathVariable("restauranteId") Long restauranteId, @PathVariable("produtoId") Long produtoId) {
         Produto produto = produtoRepository.findByRestauranteId(produtoId, restauranteId);
 
@@ -196,12 +197,20 @@ public class RestauranteProdutoController {
             throw new FotoProdutoNaoEncontradoException(String.format("Não existe um cadastro de foto do produto com código %d para o restaurante de código %d",
                     produtoId, restauranteId));
 
-        InputStream recuperar = fotoStorageService.recuperar(fotoById.getNome());
+        FotoRecuperada fotoRecuperada = fotoStorageService.recuperar(fotoById.getNome());
 
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.valueOf(MediaType.TEXT_PLAIN_VALUE))
-                .body(new InputStreamResource(recuperar));
+        if (fotoRecuperada.getUrl() != null) {
+            return ResponseEntity
+                    .status(HttpStatus.FOUND)
+                    .header(HttpHeaders.LOCATION,fotoRecuperada.getUrl())
+                    .build();
+        } else {
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.valueOf(MediaType.TEXT_PLAIN_VALUE))
+                    .body(new InputStreamResource(fotoRecuperada.getInputStream()));
+        }
+
 
     }
 

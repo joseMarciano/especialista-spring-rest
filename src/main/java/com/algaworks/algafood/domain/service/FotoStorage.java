@@ -13,7 +13,7 @@ public interface FotoStorage {
 
     void remover(String uri);
 
-    InputStream recuperar(String nomeArquivo);
+    FotoRecuperada recuperar(String nomeArquivo);
 
 
     default String gerarNomeArquivo(String nome){
@@ -34,6 +34,13 @@ public interface FotoStorage {
         private String nomeArquivo;
         private String contentType;
         private InputStream file;
+    }
+
+    @Builder
+    @Getter
+    class FotoRecuperada {
+        private InputStream inputStream;
+        private String url;
     }
 
 }
