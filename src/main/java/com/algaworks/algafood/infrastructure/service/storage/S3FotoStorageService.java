@@ -4,13 +4,12 @@ import com.algaworks.algafood.core.storage.StorageProperties;
 import com.algaworks.algafood.domain.exception.StorageException;
 import com.algaworks.algafood.domain.service.FotoStorage;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.net.URL;
 
 import static java.lang.String.format;
@@ -18,13 +17,11 @@ import static java.lang.String.format;
 @Service
 public class S3FotoStorageService implements FotoStorage {
 
-    private final AmazonS3 amazonS3;
-    private final StorageProperties storageProperties;
+    @Autowired
+    private AmazonS3 amazonS3;
 
-    public S3FotoStorageService(AmazonS3 amazonS3, StorageProperties storageProperties) {
-        this.amazonS3 = amazonS3;
-        this.storageProperties = storageProperties;
-    }
+    @Autowired
+    private StorageProperties storageProperties;
 
 
     @Override
