@@ -1,5 +1,6 @@
 package com.algaworks.algafood.core.storage;
 
+import com.amazonaws.regions.Regions;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,13 +9,13 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 
 @Component
-@ConfigurationProperties("{algafood.storage}")
+@ConfigurationProperties(prefix = "algafood.storage")
 @Getter
 @Setter
 public class StorageProperties {
 
     private Local local = new Local();
-    private S3 sThree = new S3();
+    private S3 s3 = new S3();
 
 
     @Getter
@@ -30,7 +31,7 @@ public class StorageProperties {
         private String idChaveAcesso;
         private String chaveAcessoSecreta;
         private String diretorio;
-        private String regiao;
+        private Regions regiao;
     }
 }
 // Essa classe segue o caminho das propriedades do application.yml

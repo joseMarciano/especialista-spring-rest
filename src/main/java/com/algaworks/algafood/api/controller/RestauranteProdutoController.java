@@ -132,6 +132,7 @@ public class RestauranteProdutoController {
                 .builder()
                 .nomeArquivo(fotoSaved.getNome())
                 .file(fotoProdutoDto.getFile().getInputStream())
+                .contentType(fotoSaved.getContentType())
                 .build();
 
         fotoStorageService.substituir(nomeArquivoAntigo, novaFoto);

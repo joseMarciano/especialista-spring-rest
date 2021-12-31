@@ -32,6 +32,7 @@ public interface FotoStorage {
     @Getter
     class NovaFoto {
         private String nomeArquivo;
+        private String contentType;
         private InputStream file;
     }
 

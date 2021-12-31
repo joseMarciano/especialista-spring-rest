@@ -18,7 +18,7 @@ public class AmazonS3Config {
 
     @Bean
     public AmazonS3 amazonS3() {
-        var sThreeData = storageProperties.getSThree();
+        var sThreeData = storageProperties.getS3();
         var credentilas = new BasicAWSCredentials(sThreeData.getIdChaveAcesso(), sThreeData.getChaveAcessoSecreta());
         return AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentilas))
