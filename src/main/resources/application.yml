@@ -36,13 +36,12 @@ spring:
 #    root: ERROR
 algafood:
   storage:
-    tipo-storage: s3
     s3:
-      bucket: "app.algafood.cloud"
-      id-chave-acesso: "AKIAWP7LIUDW5S7DZPUG"
-      chave-acesso-secreta: "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"
-      diretorio: "catalogo"
-      regiao: "us-east-2"
+      bucket: app.algafood.cloud
+      id-chave-acesso: (AWS-SECRET),
+      chave-acesso-secreta: (AWS-SECRET),
+      diretorio: catalogo,
+      regiao: us-east-1
 
     local:
       diretorio-fotos: "/home/jose/Desktop"
