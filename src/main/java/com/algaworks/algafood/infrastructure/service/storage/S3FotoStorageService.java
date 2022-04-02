@@ -14,7 +14,7 @@ import java.net.URL;
 
 import static java.lang.String.format;
 
-@Service
+//@Service
 public class S3FotoStorageService implements FotoStorage {
 
     @Autowired

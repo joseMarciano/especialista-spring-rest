@@ -7,6 +7,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +23,7 @@ public class FotoStorageConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "algafood.storage.tipo-storage", havingValue = "s3")
     public AmazonS3 amazonS3() {
         var sThreeData = storageProperties.getS3();
         var credentilas = new BasicAWSCredentials(sThreeData.getIdChaveAcesso(), sThreeData.getChaveAcessoSecreta());
