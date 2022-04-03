@@ -36,6 +36,7 @@ spring:
 #    root: ERROR
 algafood:
   storage:
+    tipo-storage: s3
     s3:
       bucket: app.algafood.cloud
       id-chave-acesso: (AWS-SECRET),
@@ -45,3 +46,11 @@ algafood:
 
     local:
       diretorio-fotos: "/home/jose/Desktop"
+
+  email:
+    from: fakendapi@gmail.com
+    mail:
+      host: smtp.sendgrid.net
+      port: 587
+      username: apikey
+      password: (PASSWORD)

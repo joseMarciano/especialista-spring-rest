@@ -5,7 +5,10 @@ import com.algaworks.algafood.domain.model.*;
 import com.algaworks.algafood.domain.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 import static com.algaworks.algafood.domain.model.StatusPedido.CRIADO;
+import static com.algaworks.algafood.domain.service.EmailSenderService.*;
 import static java.lang.String.format;
 
 @Service
@@ -16,17 +19,19 @@ public class PedidoService {
     private final ProdutoRepository produtoRepository;
     private final UsuarioRepository usuarioRepository;
     private final FormaPagamentoRepository formaPagamentoRepository;
+    private final EmailSenderService emailSenderService;
 
     public PedidoService(PedidoRepository pedidoRepository,
                          RestauranteRepository restauranteRepository,
                          ProdutoRepository produtoRepository,
                          UsuarioRepository usuarioRepository,
-                         FormaPagamentoRepository formaPagamentoRepository) {
+                         FormaPagamentoRepository formaPagamentoRepository, EmailSenderService emailSenderService) {
         this.pedidoRepository = pedidoRepository;
         this.restauranteRepository = restauranteRepository;
         this.produtoRepository = produtoRepository;
         this.usuarioRepository = usuarioRepository;
         this.formaPagamentoRepository = formaPagamentoRepository;
+        this.emailSenderService = emailSenderService;
     }
 
     public Pedido emitir(Pedido pedido) {
@@ -75,5 +80,11 @@ public class PedidoService {
         }
 
         pedidoRepository.save(pedido);
+
+        emailSenderService.send(Message.builder()
+                        .subject("AlgaFood")
+                        .body("\"Pedido emitido com sucesso!!\"")
+                        .destinations(Collections.singleton("marciano13@gmail.com"))
+                .build());
     }
 }
