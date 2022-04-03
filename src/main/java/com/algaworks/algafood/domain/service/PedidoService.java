@@ -19,19 +19,17 @@ public class PedidoService {
     private final ProdutoRepository produtoRepository;
     private final UsuarioRepository usuarioRepository;
     private final FormaPagamentoRepository formaPagamentoRepository;
-    private final EmailSenderService emailSenderService;
 
     public PedidoService(PedidoRepository pedidoRepository,
                          RestauranteRepository restauranteRepository,
                          ProdutoRepository produtoRepository,
                          UsuarioRepository usuarioRepository,
-                         FormaPagamentoRepository formaPagamentoRepository, EmailSenderService emailSenderService) {
+                         FormaPagamentoRepository formaPagamentoRepository) {
         this.pedidoRepository = pedidoRepository;
         this.restauranteRepository = restauranteRepository;
         this.produtoRepository = produtoRepository;
         this.usuarioRepository = usuarioRepository;
         this.formaPagamentoRepository = formaPagamentoRepository;
-        this.emailSenderService = emailSenderService;
     }
 
     public Pedido emitir(Pedido pedido) {
@@ -80,11 +78,5 @@ public class PedidoService {
         }
 
         pedidoRepository.save(pedido);
-
-        emailSenderService.send(Message.builder()
-                        .subject("AlgaFood")
-                        .body("\"Pedido emitido com sucesso!!\"")
-                        .destinations(Collections.singleton("marciano13@gmail.com"))
-                .build());
     }
 }

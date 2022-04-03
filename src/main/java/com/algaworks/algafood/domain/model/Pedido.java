@@ -1,8 +1,10 @@
 package com.algaworks.algafood.domain.model;
 
+import com.algaworks.algafood.domain.event.PedidoConfirmadoEvent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,8 +20,8 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "PEDIDOS")
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Pedido {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Pedido extends AbstractAggregateRoot<Pedido> {
 
     @Id
     @Column(name = "ID", updatable = false)
@@ -98,6 +100,7 @@ public class Pedido {
 
         if (CONFIRMADO.equals(proximoStatus)) {
             this.setDataConfirmacao(OffsetDateTime.now());
+            registerEvent(new PedidoConfirmadoEvent(this));
         }
 
         if (ENTREGUE.equals(proximoStatus)) {
