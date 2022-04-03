@@ -4,6 +4,7 @@ import com.algaworks.algafood.domain.event.PedidoConfirmadoEvent;
 import com.algaworks.algafood.domain.service.EmailSenderService;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Collections;
 
@@ -19,7 +20,8 @@ public class PedidoConfirmadoListener {
     }
 
 
-    @EventListener
+//    @EventListener
+    @TransactionalEventListener // nesse caso devemos tomar cuidado pois será disparado o event depois do commit e não tera rollback em casos de error no evento (podemos sleecionar fases como BEFORE_COMMIT )
     public void onPedidoConfirmado(PedidoConfirmadoEvent event) {
 //        event.getPedido()
         emailSenderService.send(Message.builder()
