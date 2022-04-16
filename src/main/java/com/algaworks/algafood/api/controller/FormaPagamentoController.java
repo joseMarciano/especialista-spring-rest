@@ -7,6 +7,7 @@ import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.FormaPagamento;
 import com.algaworks.algafood.domain.service.FormaPagamentoService;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
@@ -46,8 +48,11 @@ public class FormaPagamentoController {
     @GetMapping
     @Transactional
     @ResponseMappedEntity(mappedClass = FormaPagamentoRepresentation.Listagem.class)
-    public List<FormaPagamento> findAll() {
-        return formaPagamentoService.findAll();
+    public ResponseEntity<List<FormaPagamento>> findAll() {
+        return ResponseEntity
+                .ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formaPagamentoService.findAll());
     }
 
 
